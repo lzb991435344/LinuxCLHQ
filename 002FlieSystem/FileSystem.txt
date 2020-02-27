@@ -1,0 +1,101 @@
+一 目錄和文件
+
+ ls -a,-i,-n,-l
+
+1.獲取文件屬性
+  stat,fstat,lstat
+struct stat {
+               dev_t     st_dev;         /* ID of device containing file */
+               ino_t     st_ino;         /* inode number */
+               mode_t    st_mode;        /* protection */
+               nlink_t   st_nlink;       /* number of hard links */
+               uid_t     st_uid;         /* user ID of owner */
+               gid_t     st_gid;         /* group ID of owner */
+               dev_t     st_rdev;        /* device ID (if special file) */
+               off_t     st_size;        /* total size, in bytes */
+               blksize_t st_blksize;     /* blocksize for filesystem I/O */
+               blkcnt_t  st_blocks;      /* number of 512B blocks allocated */
+
+               /* Since Linux 2.6, the kernel supports nanosecond
+                  precision for the following timestamp fields.
+                  For the details before Linux 2.6, see NOTES. */
+
+               struct timespec st_atim;  /* time of last access */
+               struct timespec st_mtim;  /* time of last modification */
+               struct timespec st_ctim;  /* time of last status change */
+
+           #define st_atime st_atim.tv_sec      /* Backward compatibility */
+           #define st_mtime st_mtim.tv_sec
+           #define st_ctime st_ctim.tv_sec
+           };
+
+
+
+
+2.文件訪問的權限 st_mode 16位的位圖，表示文件的類型，文件訪問權限，特殊權限位
+
+           S_ISUID     04000   set-user-ID bit
+           S_ISGID     02000   set-group-ID bit (see below)
+           S_ISVTX     01000   sticky bit (see below)
+
+           S_IRWXU     00700   owner has read, write, and execute permission
+           S_IRUSR     00400   owner has read permission
+           S_IWUSR     00200   owner has write permission
+           S_IXUSR     00100   owner has execute permission
+
+           S_IRWXG     00070   group has read, write, and execute permission
+           S_IRGRP     00040   group has read permission
+           S_IWGRP     00020   group has write permission
+           S_IXGRP     00010   group has execute permission
+
+           S_IRWXO     00007   others (not in group) have read,  write,  and
+                               execute permission
+           S_IROTH     00004   others have read permission
+           S_IWOTH     00002   others have write permission
+           S_IXOTH     00001   others have execute permission
+
+
+
+3.umask  命令
+umask 0002
+
+   防止產生文件過鬆的文件
+       #include <sys/types.h>
+       #include <sys/stat.h>
+
+       mode_t umask(mode_t mask);
+
+
+
+4.文件權限的更改和管理
+	chmod a+x +filename
+
+       #include <sys/stat.h>
+       int chmod(const char *pathname, mode_t mode);
+       int fchmod(int fd, mode_t mode);
+
+       #include <fcntl.h>           /* Definition of AT_* constants */
+       #include <sys/stat.h>
+
+       int fchmodat(int dirfd, const char *pathname, mode_t mode, int flags);
+
+5.粘住位
+  t位：在內存中保留痕跡，使得裝載更快
+  目前用於目錄t位設計：tmp目錄
+
+6.文件系統  FAT,UFS
+   存儲或管理文件數據
+7.硬鏈接，符號鏈接
+8.utime
+9.目錄的創建和銷毀
+10.更改當前的工作路徑
+11.分析目錄，讀取目錄內容
+
+
+二 系統數據文件和信息
+
+
+
+
+
+三 

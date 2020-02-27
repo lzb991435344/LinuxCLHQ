@@ -1,0 +1,163 @@
+1.stdio: FILE類型結構,結構提
+
+ FILE* fopen(const char* path, const char* mode);
+  (1)返回值：FILE* 返回指針
+        errno 全局變量 
+  (2)mode:b是二進制流，linux下分文本流和二進制流 
+  (3)#include <stdio.h>  perror(const char* s)  自動關聯全局變量errno
+  (4)#include <string.h>  char* strerror(int errnum)
+fclose();
+
+fgetc(); 
+fputc();
+
+fgets();
+  //char *fgets(char *s, int size, FILE *stream);
+  正常結束 (1)size-1 '\n'  
+         （2）#define SIZE 5 
+             char buf[SIZE];
+             fgets(buf, SIZE, stream);
+            第一次讀取 abcdef  buf中含 abcd\0 
+         （3）用以上代碼進行讀取需要讀取幾次？
+             1--> a b c d '\0'
+             2--> '\n' '\0'   
+fputs();
+
+/**
+ fread(buf, size, nmemb,fp);
+1--> 數據量足夠
+2--> 只有5個字節
+ (1)fread(buf, 1, 10, fp);
+   1->10 ->10字節
+   2-> 5 -> 5字節
+ (2)fread(buf, 10, 1, fp)
+   1-> 1 ->10字節
+   2-> 0 ->？？
+*/
+
+fwrite();
+
+
+printf();
+scanf(); %s慎用
+
+fseek();//設置文件的偏移位置
+/**
+  SEEK_SET 文件開頭
+  SEEK_CUR 文件當前位置
+  SEEK_END 文件尾
+
+*/
+ftell();//文件大小不可超過2G
+rewind();//重新定位文件的位置
+
+fseeko
+ftello
+
+flush();
+/**
+緩衝區的作用：合並系統調用
+行緩衝：換行刷新，寫滿刷新，強制刷新（標準輸出是終端設備）
+全緩衝：寫滿刷新，強制刷新（默認，只要不是終端設備）
+不緩衝： stderr,輸出設備，出錯直接輸出內容
+*/
+
+getline()
+
+
+2.const 
+char* ptr = "abc"; ptr[0] = "x"   ?"xbc"?
+
+3.臨時文件（數據進行臨時保存）
+(1)不衝突創建臨時文件
+(2)及時銷毀
+
+char* tmpnam(char* s);//並發中存在的問題  
+FILE *tmpfile(void);//以二進制的方式打開一個文件 w+b
+
+ulimit -a 能打開文件的最多個數
+
+4.文件描述符
+(1)概念  int fd;是一个整型数，数组下标，优先使用当前可用范围内最小的；fd取值为0,1,2为标准设备；
+        数组位于一个进程的空间中，文件被打开多次就会出现多少个结构体，结构体会有对当前文件描述符的引用计数
+
+stream: stdin,stdout,stderr(0,1,2)
+
+(2)文件IO操作 系统调用 open，close,read,write,lseek
+             r-->O_RDONLY
+             r+--->O_RDWR
+             w--->O_WRONLY | O_CREAT | O_TRUNC
+             w+ --->O_RDWR | O_TRUNC | O_CREAT
+    open()使用变参来做实现，printf也是
+    printf("i am a boy!")
+    printf("%d-%d",year, month)         
+(3)文件IO与标准IO的区别
+  標準IO:有緩衝區，吞吐量大
+  文件IO(系統調用IO):陷入內核，實時性高
+  兩種IO不可混合使用   
+  轉換函數：
+  int fileno(FILE *stream);
+  FILE *fdopen(int fd, const char *mode); //把一個打開的文件描述符封裝到FILE*
+  如何是一個程序變快？
+  strace 查看系統調用
+
+(4)IO的效率
+  改變mycopy.c,增加不BUFSIZE的值，觀察程序消耗的時間，性能拐點
+
+(5)文件共享
+  寫程序刪除文件中的第10行
+  基本過程：
+  (1)一個文件
+   1->open r ->fd1 ->lseek 11
+   2->open r+ ->fd2 ->lseek 10
+
+   while(1)
+   {
+    1->fd1->read
+    2->fd2->write
+   }
+   (2)兩個進程（進程間通信）
+    p1 ->open ->r
+    p2 ->open ->r+
+    p1->read -> p2->write
+
+  (3)函數   truncate(const char* path,off_t length) //截取長度
+           ftruncate()
+(6)原子操作
+   不可分割的操作，作用：解決競爭或衝突
+   多進程或多線程並發
+   如tmpnam不是原子操作
+
+(7)程序中的重定向 dup,dup2
+   a.1,2輸出都有特定的位置，改變之後需要還原
+   b.模塊化思維，不只是寫main函數
+   c.懷疑一切
+(8)同步 sync,fsync,fdatasync
+   數據：文件當中的有效內容
+   亞數據：文件修改時間，屬性等
+
+   sync:設備解除掛載時
+   fsync:刷新文件，同步一個文件的buffer或cace
+   fdatasync:只刷數據，不刷亞數據
+
+(9)管家級別的函數
+  fcntl()  文件描述符相關
+  ioctl() 設備相關的內容
+(10)/dev/fd/目录  
+  虛目錄，顯示的是當前進程的文件描述符信息
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
