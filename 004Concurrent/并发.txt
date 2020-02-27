@@ -1,0 +1,280 @@
+
+
+同步：同步事件可预先看得到
+异步：异步事件表明出现各种事件的未知可能性。
+异步事件处理：
+（1）查询： 异步事件比较频繁
+（2）通知法：异步事件发生比较稀疏
+
+一、信号（初步异步）
+1.信号概念
+  信号是软件中断。信号的响应依赖于中断。
+2.signal()
+ （1）kill -l  查看信号
+   1-31 标准信号 查看信号的说明
+   34-64 实时信号
+
+ （2）动作：终止+core
+   core文件：程序的现场，一般保存的是出错的现场
+   corefgetline.c
+   make getline , ./getline /etc/service , ulimit -a,-c 10240
+
+   ./getline /etc/service , ls,core.+进程号，加-g选项可调试
+ （3）signal
+
+   原型：
+   typedef void (*sighandler_t)(int);
+   sighandler_t signal(int signum, sighandler_t handler);
+
+   转换：
+   void (*signal(int signum, void (*func)(int)))(int);
+
+   002start.c 打印*号
+    ctrl + c  SIG_INT 终端中断符 终止一个进程
+    ctrl + \  SIG_QUIT
+
+    PS：信号会打断阻塞的系统调用。
+    例子： mycopy()
+     open()函数在阻塞的时候，会有一个宏 EINTR
+     read()也会被打断
+    修正：之前产生阻塞的代码
+
+3.信号的不可靠
+ （1）信号的行为不可靠
+   内核布置的程序现场，但是当相同的信号来临时，会覆盖原来的现场
+   解决办法：
+   （1）单次响应
+   （2）构造链式结构
+4.可重入函数
+  信号可不可靠。
+  第一次调用未结束，发生第二次调用，第二次调用也可正确得到结果。
+  所有的系统调用都是可重入的，一部分的库函数是可重入的。
+   open,read()...
+   memcpy()...（内存有重叠，用memmove）
+  不可重入的举例：rand() ,,,,,,rand_r(int)可重入
+
+5.信号的响应过程
+ 中断，调度等
+ （1）内核为进程维护了mask和pending的32位的位图
+   mask 信号屏蔽字,用来表示当前信号的状态，一般上全部为1
+   pending 表示当前进程收到的信号，初始值为0
+   
+   kernel到user态切换的时候，mask& pending会得到一个值，若为0，则无中断
+   有中断打断的时候，才会进行按位与，栈中存动作函数的地址，调到地址执行
+   相应的函数，返回再次处理信号
+  （2）信号从收到到响应有一个不可避免的延迟过程
+     如何忽略掉一个信号？ SIG_IGN(将mask信号置位为0)，可以阻止到来和响应时间
+     标准信号为什么要丢失？ 
+      有信号表示在pengding的位图上
+     m  p （一个信号）        
+     1  0 初始
+     1  1 有信号（&）
+     0  0 重置为0
+     1  0 m重置为1
+
+
+     m    p(多个信号)
+     1    0 初始
+     1    1 信号1
+     0    0 重置
+     0    1 信号2....n
+
+     标准信号的响应没有严格的顺序。
+     不能从信号处理函数中随意往外跳（setjmp,longjmp）
+
+     //保存了掩码的状态
+     int sigsetjmp()
+     int siglongjmp()
+6.常用函数
+ (1)kill() 发信号
+
+ int kill(pid_t pid, int sig)
+  pid 正数，sig发给pid 
+  pid == 0  给同组所有的进程发（组内广播）
+  pid == -1 发送给每个新进程（有权限发的进程，除了给1号发）
+  pid < -1  发送给进程组 -pid所在的进程组
+
+  sig == 0 error check, 用于检测进程或进程组是否存在
+  返回 -1，还要看errno表示的值，读系统手册
+ (2)raise()给当前进程发信号或线程，给自己发信号
+  等价于 单kill(getpid(), sig)
+         多pthread_kill(pthread_self(), sig)
+
+ (3)alarm() 等待一定时间唤醒
+  当定时器指定的时间到时，它向进程发送SIGALRM信号。可以设置忽略或者不捕获此信号，如果采用默认方式其动作是终止调用该alarm函数的进程。
+  
+  例子：使用单一的计时器，构造一组laram()或setitimer()函数，实现任意数量的计时器
+
+ (4)pause() 等待一个信号
+ 
+ (5)setitimer() 精度控制更好
+
+ (6)abort() 制造异常杀死进程
+ (7)system() = fork + exec + wait
+   SIGCHLD will be blocked, and SIGINT and SIGQUIT will be ignored
+   信号屏蔽字和signal()
+ (8)sleep()秒级的休眠
+   sleep -> alarm() + pause()
+   sleep -> nanosleep 
+   
+   替代函数：
+   nanosleep(), 
+   usleep(),
+   select()监视文件描述符
+
+7.信号集
+    信号集类型：sigset_t  
+       int sigemptyset(sigset_t *set);
+
+       int sigfillset(sigset_t *set);
+
+       int sigaddset(sigset_t *set, int signum);
+
+       int sigdelset(sigset_t *set, int signum);
+
+       int sigismember(const sigset_t *set, int signum);
+
+
+8.信号屏蔽字和pending集的处理
+	sigprocmask(); 信号屏蔽字的处理函数
+    决定信号的响应时间
+    sigpending();
+9.扩展函数
+ (1)sigsuspend() 原子操作 
+   类似于pause() 
+
+ (2)sigaction() 替代signal()
+
+ 
+
+10.实时信号与标准信号的区别
+ (1)标准信号会丢失
+（2）标准信号无严格顺序，未定义行为
+（3）同时到达先响应标准信号，再实时信号
+（4）实时信号需要排队，有顺序
+（5）SIGUSR1,SIGUSR2预留信号
+（6）存放位置 /usr/include/bits/signum.h
+
+  (7)ulimit -a、-i是修改大小 
+  排多少的信号量
+  pending signals  (-i) 7758
+
+
+二、线程（强制异步）
+1.线程概念
+  一个正在运行的函数，（main线程在运行）
+  同一个地址空间内的通信
+  posix线程是一套标准，而不是实现,pthread_
+  openmp线程标准
+  线程标识：pthread_t
+  命令：ps axm
+       ps ax -L 详细信息 LWP轻量级进程
+  
+ link -pthread
+ pthread_equal() 比较两个线程的ID
+ pthread_self() 获取线程标识
+       
+2.线程的创建 
+   pthread_create()线程的调度取决于调度器策略
+  （1）线程终止
+      3种，
+      1）线程从启动例程中返回，返回值是线程的退出码
+      2）线程可以被同一进程中的其他线程取消
+      3）线程调用pthread_exit(),若是最后一个，则进程结束
+      
+      pthread_join() -->wait();
+  （2）线程的取消选项
+      pthread_cancel()
+      2种状态：允许或者不允许
+      允许：
+      1）异步cancel
+      2）推迟（默认，推迟至cancel点响应）
+        cancel点：POSIX都是可能引发阻塞的系统调用
+        function: pthread_setcancelstate()设置是否允许取消
+                  pthread_setcanceltype() 设置取消方式
+                  pthread_testcancel()取消点
+      不允许：
+
+      线程分离方法：
+      1)pthread_detach(),自生自灭
+      2)pthread_create() 第二参数，pthread_attr_setdetachstate
+
+      先取消，再收尸
+  （3）栈的清理
+   pthread_cleanup_push(); //挂钩子函数
+   pthread_cleanup_pop)(); //取钩子函数
+3.线程同步
+  （1）互斥量（类似于bool类型）
+   类型：pthread_mutex
+   pthread_mutex_init()
+   pthread_mutex_trylock()非阻塞/pthread_mutex_lock() 阻塞方式
+   pthread_mutex_unlock
+   pthread_mutex_destroy()
+   pthread_once()单次初始化，只调用一次
+  （2）条件变量
+    pthread_cond_t()
+    pthread_cond_init() //动态或者静态初始化
+    pthread_cond_destroy()
+    pthread_cond_broadcast()
+    pthread_cond_signal()
+    pthread_cond_timewait()
+    pthread_cond_wait()
+    (3)信号量（类似于int）
+     条件变量和互斥量
+    (4)读写锁
+     r---> 读锁，共享
+     R---> 写锁，互斥
+     写者饿死解决：一个读锁，一个写锁等待，后来的读锁先等待，
+     待“真正加上写锁”，写完毕再让读者加锁
+4.线程相关属性
+  
+    pthread_create()--->第二个参数
+    类型：pthread_attr_t
+    pthread_attr_init()
+    pthread_attr_destroy()
+    pthread_attr_setstacksize()
+  线程同步的属性 
+    1）互斥量属性:
+    int pthread_mutexattr_destroy(pthread_mutexattr_t *attr);
+    int pthread_mutexattr_init(pthread_mutexattr_t *attr);
+
+
+    //是否跨进程使用
+    int pthread_mutexattr_getpshared(const pthread_mutexattr_t
+           *restrict attr, int *restrict pshared);
+    int pthread_mutexattr_setpshared(pthread_mutexattr_t *attr,
+           int pshared);
+
+    clone() 跨进程共用？？？
+
+    int pthread_mutexattr_gettype(const pthread_mutexattr_t *restrict attr,
+           int *restrict type);
+    int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int type);
+    2）条件变量
+    int pthread_condattr_destroy(pthread_condattr_t *attr);
+    int pthread_condattr_init(pthread_condattr_t *attr);
+
+    3）读写锁属性
+    int pthread_rwlockattr_destroy(pthread_rwlockattr_t *attr);
+    int pthread_rwlockattr_init(pthread_rwlockattr_t *attr);
+
+    int pthread_rwlockattr_getpshared(const pthread_rwlockattr_t
+           *restrict attr, int *restrict pshared);
+    int pthread_rwlockattr_setpshared(pthread_rwlockattr_t *attr,
+           int pshared);
+
+
+    
+5.可重入概念
+ 1）多线程中的IO
+   使用的标准io都支持了多线程
+   getchar_unlock(),不锁住缓冲区，有可能被覆盖
+ 2）线程与信号
+   以进程为单位 无mask,只有pending(初始化为0)来记录当前进程收到的信号
+   以线程为单位，有mask和pending
+ 3）
+6.线程和信号的关系
+  线程与fork
+
+
+

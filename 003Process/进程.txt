@@ -1,0 +1,79 @@
+
+1.进程标识符pid
+	pid_t
+	命令 ps
+	进程号是顺次向下使用
+	getpid()
+	getppid()
+2.进程产生
+	（1）fork():拷贝，克隆，意味着一模一样
+		父子进程的区别：
+		fork()返回值不一样，pid不同，ppid不同，未决信号不同，
+		文件锁不继承，资源利用量清零
+		init进程：1号，是所有进程的祖先进程
+		调度器的调度策略决定哪个进程先运行。
+		fflush()的重要性
+	（2）vfork()
+
+3.进程的消亡及释放资源
+	wait();
+	waitpid();
+	waitid();
+	wait3();
+	wait4();
+
+4.exec函数族
+
+	   extern char **environ;
+
+       int execl(const char *path, const char *arg, ...
+                       /* (char  *) NULL */);
+       int execlp(const char *file, const char *arg, ...
+                       /* (char  *) NULL */);
+       int execle(const char *path, const char *arg, ...
+                       /*, (char *) NULL, char * const envp[] */);
+       int execv(const char *path, char *const argv[]);
+       int execvp(const char *file, char *const argv[]);
+       int execvpe(const char *file, char *const argv[],
+                       char *const envp[]);
+
+
+5.用户权限和组权限(u+s,g+s)
+	getuid();
+	geteuid();
+	getgid();
+	getegid();
+	setuid();
+	setgid();
+	setreuid();
+	setregid();
+	seteuid();
+	setegid();
+
+6.解释器文件
+
+7.system()
+	fork + exec +wait封装。
+8.进程会计
+  acct();
+
+9.进程时间
+
+	times();
+10.守护进程
+	会话session,标识sid
+	终端
+
+	setsid();
+	getpgrp();
+	getpgid();
+	setpgid();
+	单实例守护进程：锁文件 /var/run/name.pid
+	脚本启动文件： /etc/rc*....
+
+11.系统日志
+	权限分割
+	syslogd服务
+	void openlog(const char *ident, int option, int facility);
+    void syslog(int priority, const char *format, ...);
+    void closelog(void);
