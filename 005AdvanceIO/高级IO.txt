@@ -1,0 +1,11 @@
+
+1）详细解析
+man 7 socket,man 7 signal
+
+2）阻塞和非阻塞各有一个假错
+  EAGAIN
+  EINTR
+
+1.非阻塞IO  ---  阻塞IO
+
+补充：有限状态机编程

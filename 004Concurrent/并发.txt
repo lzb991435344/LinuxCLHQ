@@ -272,9 +272,26 @@
  2）线程与信号
    以进程为单位 无mask,只有pending(初始化为0)来记录当前进程收到的信号
    以线程为单位，有mask和pending
- 3）
+   
+   int pthread_sigmask(int how, const sigset_t *set, sigset_t *oldset);
+
+   int sigwait(const sigset_t *set, int *sig);
+
+   int pthread_kill(pthread_t thread, int sig);
+   类比于  int kill(pid_t pid, int sig);
+
+ 3）线程与fork()
+  
+
+
 6.线程和信号的关系
   线程与fork
 
 
+另一个线程标准：
+openmp ----> www.OpenMP.org 并发标准
 
+线程工作模式：
+1）流水线
+2）分流/汇总
+3）C/S架构
