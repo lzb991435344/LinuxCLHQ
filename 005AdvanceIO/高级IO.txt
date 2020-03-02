@@ -6,6 +6,141 @@ man 7 socket,man 7 signal
   EAGAIN
   EINTR
 
-1.非阻塞IO  ---  阻塞IO
-
+非阻塞IO  ---  阻塞IO
 补充：有限状态机编程
+
+1.非阻塞IO
+
+  数据中继（终端） 
+  阻塞和非阻塞 
+  1）RL--WR--RR--WL
+
+  实例：代码实现，有限状态机编程
+  2）RL--WR
+     RR--WL
+  root:ctrl+alt + F11,
+       ctrl+alt + F12,switch
+       ctrl+alt + F7,exit
+
+       cpu busy -----> state->R
+ 有限状态机编程解决问题：
+ 1）简单流程
+ 	自然流程是结构化的
+ 2）复杂流程   
+ 	自然流程是非结构化的
+
+ 	ulimit -a /openfiles
+
+ 	中继引擎实现：relayer
+2.IO多路转接
+  监视多个文件描述符的行为
+  (1）select() 移植较好
+  #include <sys/select.h>
+  	 int select(int nfds, fd_set *readfds, fd_set *writefds,
+                  fd_set *exceptfds, struct timeval *timeout);
+      
+         nfds = 最大的文件描述符数 + 1
+         readfds 读的描述符
+         writefds 写的描述符
+         exceptfds 异常的描述符
+
+
+      void FD_CLR(int fd, fd_set *set);
+      int  FD_ISSET(int fd, fd_set *set);//查看集合中是否有特定的描述符
+      void FD_SET(int fd, fd_set *set);
+      void FD_ZERO(fd_set *set);
+
+      #include <sys/time.h>
+       struct timeval {
+               long    tv_sec;         /* seconds */
+               long    tv_usec;        /* microseconds */
+           };
+
+     （i）select 缺陷1：监视现场和监视结果放在同一块空间，未用const修饰
+      (ii) select 缺陷2: ulimit -a/i  文件描述符有大小的限制
+     （ii）select 缺陷3:监视事件太单一，除读写之外，其他事件都是异常事件
+
+  (2)poll() 用户维护行为
+  	   #include <poll.h>
+
+       int poll(struct pollfd *fds, nfds_t nfds, int timeout);
+
+       	fds：结构体数组的起始位置
+       	nfds:结构体数组的长度
+       	timeout： 毫秒
+       	-1 阻塞 
+       	0 非阻塞
+
+
+       struct pollfd {
+               int   fd;         /* file descriptor */
+               short events;     /* requested events */
+               short revents;    /* returned events */
+        };
+
+
+  (3)epoll() poll效率不够高，减少用户维护行为
+  	#include <sys/epoll.h>
+    （i）epoll_create(2) 
+
+    （ii） epoll_ctl(2)
+
+     (iii) epoll_wait(2)
+
+      typedef union epoll_data {
+               void        *ptr;
+               int          fd;
+               uint32_t     u32;
+               uint64_t     u64;
+           } epoll_data_t;
+
+           struct epoll_event {
+               uint32_t     events;      /* Epoll events */
+               epoll_data_t data;        /* User data variable */
+           };
+
+
+3.其它读写函数
+多个碎片的小地址写到同一个文件中
+(1)readv()
+	ssize_t readv(int fd, const struct iovec *iov, int iovcnt);
+
+(2)writev()
+	ssize_t writev(int fd, const struct iovec *iov, int iovcnt);
+
+			struct iovec {
+               void  *iov_base;    /* Starting address */
+               size_t iov_len;     /* Number of bytes to transfer */
+           	};
+
+（3）readn()
+（4）writen()  mycopy.c 中写的时候需要写入特定长度字节 
+4.存储映射IO
+
+	mmap();
+	#include <sys/mman.h>
+
+       void *mmap(void *addr, size_t length, int prot, int flags,
+                  int fd, off_t offset);
+
+       prot:
+       PROT_EXEC  Pages may be executed.
+       PROT_READ  Pages may be read.
+       PROT_WRITE Pages may be written.
+       PROT_NONE  Pages may not be accessed.
+
+       flags:映射要求
+       MAP_SHARED 修改可见 or MAP_PRIVATE 不会修改内存的数据
+       
+       其他按位 |
+       MAP_ANONYMOUS 匿名映射，相当于malloc()
+
+    父子进程之间的共享存储空间（共享内存）
+
+5.文件锁
+	fcntkl()
+	lockf()
+	flock()
+
+	PS：有可能被意外解锁
+	dup2复制文件描述符，close()之后可能意外解锁
