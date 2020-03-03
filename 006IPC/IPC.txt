@@ -1,0 +1,62 @@
+						进程间通信
+
+//同一主机和不同主机
+1.pipe
+ 内核提供，单工，自同步机制
+ 匿名管道：进程间无亲缘关系
+ 命名管道：
+   makefifo()
+
+   shell:
+   1)makefifo namedfifo
+   2)ls -l namedfifo
+   3)date > namedfifo
+   4)cat namedfifo
+
+2.XSI IPC  ---> SysV
+
+  key:ftok()
+
+  主动端：先发包的一方
+  被动端：先收包的一方
+
+  #include <sys/types.h>
+  #include <sys/ipc.h>
+
+  	//取到键值
+    key_t ftok(const char *pathname, int proj_id);  
+
+    xxxget   xxxop   xxxctl
+
+    msg,sem,shm
+
+    ipcs 查看  man ipcs
+
+    ipcrm 
+
+
+  1)消息队列 双工
+    msgbget()
+    msgop()
+    msgctl()
+    int msgsnd(int msqid, const void *msgp, size_t msgsz, int msgflg);
+
+    ssize_t msgrcv(int msqid, void *msgp, size_t msgsz, long msgtyp,
+                      int msgflg);
+
+     myftp:
+
+
+     c (path)----->s
+     c ----------->(data) s
+     c------------->(eot) s
+                          cat
+  2）信号量
+
+  类似与arr,当数组中只有一个元素的时候，相当于互斥量
+
+  3）共享内存
+
+
+
+3.跨主机 socket						
