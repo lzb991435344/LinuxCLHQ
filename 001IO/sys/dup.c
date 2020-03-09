@@ -9,6 +9,7 @@
 int main(int argc, char const *argv[])
 {
 	int fd;
+	//只读，只写，无则创建，有则截断，权限0600
 	fd = open(FNAME, O_RDONLY | O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if(fd < 0)
 	{

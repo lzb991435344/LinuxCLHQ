@@ -1,4 +1,4 @@
-1.stdio: FILE類型結構,結構提
+1.stdio: FILE類型結構,結構体
 
  FILE* fopen(const char* path, const char* mode);
   (1)返回值：FILE* 返回指針
