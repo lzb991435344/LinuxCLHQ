@@ -3,7 +3,9 @@
  ls -a,-i,-n,-l
 
 1.獲取文件屬性
-  stat,fstat,lstat
+  stat：通过文件路径获取属性，面对符号链接文件时所指向的是所指向目标文件的属性
+  fstat：通过文件描述符获取属性
+  lstat：面对符号链接文件的属性
 struct stat {
                dev_t     st_dev;         /* ID of device containing file */
                ino_t     st_ino;         /* inode number */
@@ -60,6 +62,7 @@ struct stat {
 umask 0002
 
    防止產生文件過鬆的文件
+   //set file mode creation mask
        #include <sys/types.h>
        #include <sys/stat.h>
 
@@ -87,28 +90,195 @@ umask 0002
    存儲或管理文件數據
 7.硬鏈接，符號鏈接
   （1）硬
+  与目录项是同义词
+  限制：不能给分区和目录建立（inode重复问题）
   ln source dest 
   stat + filename
   //查看文件信息 
   （2）符号链接--类似于win快捷方式
   ln -s 
-8.utime
+
+#include <unistd.h>
+
+int link(const char *oldpath, const char *newpath);
+int unlink(const char *pathname);
+
+//用于封装rm命令
+int remove(const char *pathname);
+
+
+//用于封装mv命令
+// change the name or location of a file
+int rename(const char *oldpath, const char *newpath);
+
+
+8.utime 更改文件时间，最后读和修改的时间
+#include <sys/types.h>
+#include <utime.h>
+
+
+// change file last access and modification times
+int utime(const char *filename, const struct utimbuf *times);
 
 
 9.目錄的創建和銷毀
-
+  mkdir
+  rmdir
 
 10.更改當前的工作路徑
+  //封装cd命令
+  //change working directory
+  #include <unistd.h>
+  int chdir(const char *path);
+  int fchdir(int fd);
 
+  // change root directory
+  int chroot(const char *path);
 
+  //get current working directory
+  //封装pwd
+  char *getcwd(char *buf, size_t size);
 11.分析目錄，讀取目錄內容
+glob函数:
+//find pathnames matching a pattern, free memory from glob()
+#include <glob.h>
+      //通配符或解析模式
+       int glob(const char *pattern, int flags,
+                int (*errfunc) (const char *epath, int eerrno),
+                glob_t *pglob);
+       void globfree(glob_t *pglob);
+
+          //类似与main()的参数
+          typedef struct {
+               size_t   gl_pathc;    /* Count of paths matched so far  */
+               char   **gl_pathv;    /* List of matched pathnames.  */
+               size_t   gl_offs;     /* Slots to reserve in gl_pathv.  */
+           } glob_t;
+
+      flag:
+      GLOB_NOCHECK
+      GLOB_APPEND
+
+      return:
+      0
+      GLOB_NOSPACE  
+      GLOB_ABORTED
+      GLOB_NOMATCH
+常用函数：
+
+DIR *opendir(const char *name);
+int closedir(DIR *dirp);
+
+//read a directory
+struct dirent *readdir(DIR *dirp);
+
+//reset directory stream
+void rewinddir(DIR *dirp)
+//上面三个函数配合使用
+
+//set the position of the next readdir() call in the directory stream.
+ void seekdir(DIR *dirp, long loc);
+
+//return current location in directory stream
+long telldir(DIR *dirp);
+
+递归优化：ulimit -a
+  将栈的内容放到其他位置，静态区
+  变量使用在递归点之前，或者只在递归点之后使用，可以将其放到静态区，横跨递归点不能放在静态区
+ 
 
 
 二 系統數據文件和信息
+1./etc/passwd ------封装ls -a, ls -l
+  blake:x:1000:1000:blake,,,:/home/blake:/bin/bash
+
+  getpwuid()
+  getpwgid()
+
+            struct passwd {
+               char   *pw_name;       /* username */
+               char   *pw_passwd;     /* user password */
+               uid_t   pw_uid;        /* user ID */
+               gid_t   pw_gid;        /* group ID */
+               char   *pw_gecos;      /* user information */
+               char   *pw_dir;        /* home directory */
+               char   *pw_shell;      /* shell program */
+           };
+
+2./etc/group
+  getgruid()
+  getgrnam()
+  getgrgid()
+ 
+3./etc/shadow  root不能读
+ 形式：$id$salt$encrypted
+
+  blake:$6$nyyT6w7I$eFXisr4dSBIvCDVeix4vRXZ.vtUJIoAXGvh7pVmVZwTtQgnvIhp7UqhQ1kzNlkbD.6t/vN9JrNIXzlndZPXUA.:18316:0:99999:7:::
+
+  6:加密方式
+  nyyT6w7I：杂质串，或 |
+
+  getspnam()
+  crypt()
+  getpass()
+
+  struct spwd {
+               char *sp_namp;     /* Login name */
+               char *sp_pwdp;     /* Encrypted password */
+               long  sp_lstchg;   /* Date of last change
+                                     (measured in days since
+                                     1970-01-01 00:00:00 +0000 (UTC)) */
+               long  sp_min;      /* Min # of days between changes */
+               long  sp_max;      /* Max # of days between changes */
+               long  sp_warn;     /* # of days before password expires
+                                     to warn user to change it */
+               long  sp_inact;    /* # of days after password expires
+                                     until account is disabled */
+               long  sp_expire;   /* Date when account expires
+                                     (measured in days since
+                                     1970-01-01 00:00:00 +0000 (UTC)) */
+               unsigned long sp_flag;  /* Reserved */
+           };
 
 
+4.时间戳 date
+ time_t  char*  struct tm
+(1)time() 从内核中取时间戳
+time_t time(time_t *tloc);
+  time_t stamp;
+  time(&stamp);  //time(NULL)
 
+(2)gmtime() time_t to tm
 
+ struct tm *gmtime(const time_t *timep);
+ struct tm *gmtime_r(const time_t *timep, struct tm *result);
+
+//format date and time
+(3)mktime()  tm to time_t
+time_t mktime(struct tm *tm); 无const修饰
+
+(4)localtime()
+  struct tm *localtime(const time_t *timep);
+  //返回值存在于静态区
+(5)strftime()
+size_t strftime(char *s, size_t max, const char *format,
+                       const struct tm *tm);
+  struct tm* tm;
+  time_t stamp;
+  tm = localtime(&stmp);
+  strftime(buf, BUFSIZE, "%Y-%m-%d", tm);
+
+            struct tm {
+               int tm_sec;    /* Seconds (0-60) */
+               int tm_min;    /* Minutes (0-59) */
+               int tm_hour;   /* Hours (0-23) */
+               int tm_mday;   /* Day of the month (1-31) */
+               int tm_mon;    /* Month (0-11) */
+               int tm_year;   /* Year - 1900 */
+               int tm_wday;   /* Day of the week (0-6, Sunday = 0) */
+               int tm_yday;   /* Day in the year (0-365, 1 Jan = 0) */
+               int tm_isdst;  /* Daylight saving time */
+           };
 
 三 进程环境
 
