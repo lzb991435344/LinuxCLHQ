@@ -10,21 +10,67 @@
 		父子进程的区别：
 		fork()返回值不一样，pid不同，ppid不同，未决信号不同，
 		文件锁不继承，资源利用量清零
+
 		init进程：1号，是所有进程的祖先进程
 		调度器的调度策略决定哪个进程先运行。
 		fflush()的重要性
+
+		./fork1 > /tmp/out  
+
+		孤儿进程：
+		僵尸进程：Z
+
+
 	（2）vfork()
 
+	写时拷贝技术：父子进程同时使用同一个数据块，只读不影响
+	但是某个进程去写的时候，写数据块的进程memcpy一份，另外一个指向原来的区域
+
 3.进程的消亡及释放资源
-	wait();
+   wait for process to change state
+	wait(); NULL:不关心状态，一直等待，阻塞状态
 	waitpid();
 	waitid();
+
+	  #include <sys/types.h>
+       #include <sys/wait.h>
+
+       pid_t wait(int *status);
+
+       pid_t waitpid(pid_t pid, int *status, int options);
+		
+       pid：
+        < -1   meaning  wait  for  any child process whose process group ID is equal to
+              the absolute value of pid.
+
+       -1     meaning wait for any child process.
+
+       0      meaning wait for any child process whose process group ID  is  equal  to
+              that of the calling process.
+
+       > 0    meaning  wait  for  the  child whose process ID is equal to the value of
+              pid.
+
+
+		options：
+		0 == wait
+        WNOHANG  阻塞变成非阻塞
+
+       int waitid(idtype_t idtype, id_t id, siginfo_t *infop, int options);
+                       /* This is the glibc and POSIX interface; see
+                          NOTES for information on the raw system call. */
+
+	
+	
+	//freeBSD
 	wait3();
 	wait4();
 
 4.exec函数族
+		//替换进程映像
 
-	   extern char **environ;
+
+	   extern char **environ;//全局函数
 
        int execl(const char *path, const char *arg, ...
                        /* (char  *) NULL */);
@@ -37,13 +83,30 @@
        int execvpe(const char *file, char *const argv[],
                        char *const envp[]);
 
+   fork() + exec() + wait 
+   命令行：
+    shell fork() 子进程执行  现象
 
+    为什么会打印在同一个终端？
+     parent: fd  0 1 2
+      fork()
+     child: 继承得到的文件描述符 0 1 2 
+
+     argv[0]  execl("/bin/sleep", "sleep", "100", NULL);
 5.用户权限和组权限(u+s,g+s)
+
+uid 3（r,e,s(可以没有)） 
+gid 3 (r,e,s(可以没有))
+u+s权限：调用可执行文件，切换成当前二进制的身份来进行 ls -l /usr/bin/passwd
+g+s权限：
+鉴定权限的时候看的是e
+  shell的由来：
+  init（0,0,0）+ fork(),exec() -----getty()+ exec()-----login() + fork() +exec()---shell(r,e,s);
 	getuid();
 	geteuid();
 	getgid();
 	getegid();
-	setuid();
+	setuid(); //set eff id
 	setgid();
 	setreuid();
 	setregid();
