@@ -23,6 +23,7 @@ int main(int argc, char* argv[]){
     sigaddset(&set, SIGINT);
 
     //import
+    //检查或修改与指定信号相关联的处理动作
     sigprocmask(SIG_UNBLOCK, &set, &saveset);
 
 	for(j = 0; j < 100; ++j){

@@ -21,10 +21,14 @@ int main(int argc, char* argv[])
 	int len, ret, pos;
 	if(argc < 2)
 	{
-		fprintf(stderr, "Usage:%s <src_file> <des_file>\n");
+		fprintf(stderr, "Usage: <src_file> <des_file>\n");
 		exit(1);
 	}
+	/**
 
+	进程在一个慢系统调用(slow system call)中阻塞时，
+	当捕获到某个信号且相应信号处理函数返回时，这个系统调
+	用被中断，调用返回错误，设置errno为EINTR*/
     //修改点：当被信号打断的时候，需要加上控制
     do{
     	sfd = open(argv[1], O_RDONLY);
@@ -43,7 +47,7 @@ int main(int argc, char* argv[])
 		len = read(sfd, buf, BUFSIZE);
 		if(len < 0)
 		{
-			//假错
+			//假错，被信号中断
 			if(errno == EINTR){
 				continue;
 			}
@@ -58,6 +62,7 @@ int main(int argc, char* argv[])
 
 		pos = 0;
 		//防止讀取的字節數一次讀不完
+		//读取的长度作为循环条件
 		while(len > 0)
 		{ 
 			ret = write(dfd, buf + pos, len);
@@ -71,7 +76,7 @@ int main(int argc, char* argv[])
 				perror("write()");
 				exit(1);
 			}
-			pos +=ret;
+			pos += ret;
 			len -= ret;
 		}
 	}

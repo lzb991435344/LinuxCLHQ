@@ -3,6 +3,9 @@
 #include <stdlib.h>
 
 static void  int_handler (int s){
+
+	//参数1：stdout
+	//参数2： void* buf 用char*好操作
 	write(1, "!", 1);
 }
 
@@ -10,6 +13,8 @@ int main(int argc, char* argv[]){
 
 	int i;
 	//SIG_IGN 忽略信号
+	// The signals SIGKILL and SIGSTOP cannot be caught or ignored.
+
 	//signal(SIGINT, SIG_IGN);
 	//signal()执行条件
 	//1.程序未结束

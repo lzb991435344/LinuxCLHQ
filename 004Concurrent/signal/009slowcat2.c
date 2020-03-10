@@ -36,7 +36,7 @@ int main(int argc, char* argv[])
 	int len, ret, pos;
 	if(argc < 2)
 	{
-		fprintf(stderr, "Usage:%s <src_file> <des_file>\n");
+		fprintf(stderr, "Usage: <src_file> <des_file>\n");
 		exit(1);
 	}
 	

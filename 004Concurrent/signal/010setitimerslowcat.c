@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	struct itimerval itv;
 	if(argc < 2)
 	{
-		fprintf(stderr, "Usage:%s <src_file> <des_file>\n");
+		fprintf(stderr, "Usage: <src_file> <des_file>\n");
 		exit(1);
 	}
 	

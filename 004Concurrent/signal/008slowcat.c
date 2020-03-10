@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 	int len, ret, pos;
 	if(argc < 2)
 	{
-		fprintf(stderr, "Usage:%s <src_file> <des_file>\n");
+		fprintf(stderr, "Usage:<src_file> <des_file>\n");
 		exit(1);
 	}
 	
@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 	  
 	while(1)
 	{
-		while(!loop){
+		while(!loop){ //loop == 0时等待alarm信号到来
 			pause();
 		}
 		loop = 0;
