@@ -282,5 +282,203 @@ size_t strftime(char *s, size_t max, const char *format,
 
 三 进程环境
 
+1.main(int argc, char* argv[])
+2.进程的终止
+（1）正常 --刷新流，刷新IO,调用钩子函数
+  从main函数返回
+  调用exit()  --库函数  man 3 exit (区别于系统调用：调处理程序，标准IO清理，再调用调用_exit或_Exit)
+  调用_exit或_Exit  --系统调用  man 2 _exit
+  最后一个线程从其启动例程返回
+  最后一个线程调用pthread_exit
+
+
+ int main(){
+
+  printf("aaaaa\n");
+  return 0;
+ }
+ 
+ 解析：shell:中echo $？ 得到的是0；打印上一条语句执行的结果
+      return 0；返回给父进程看 
+
+
+int main(){
+
+  printf("hello!\n");
+  //return 0;
+ }
+  echo $?得到的是7,实际上打印的是printf中的字符串
+
+
+ #include <stdlib.h>
+
+    void exit(int status);
+   //the value of status & 0377 is returned to the parent 
+
+
+
+（2）异常--未释放资源等
+  在程序中调用abort（得到coredump文件）
+  接受一个信号并终止
+  最后一个线程对其取消请求作出响应
+
+
+(3)atexit():钩子函数---------类似于C++中的析构函数
+//register a function to be called at normal process termination
+      #include <stdlib.h>
+
+       int atexit(void (*function)(void));
+   钩子函数在进程结束的时候才开始调用  myatexit.c
+
+
+   int func(){
+    return 0,1,2;
+   }
+int main(){
+  int f;
+  f = func();
+  .......???  //当switch中出现了第四种情况的时候，可能是这里出问题了
+  switch(f){
+    case 0:
+    case 1:
+    case 2:
+    default:
+
+     //  exit(1);
+     //当前不能直接调用exit(1) ,否则IO会被清理掉
+     //_exit()或者abort() 
+  }
+}
+
+
+3.命令行参数的分析
+
+  //Parse command-line options
+
+  int getopt(int argc, char * const argv[],
+                  const char *optstring);
+extern char *optarg;
+extern int optind, opterr, optopt;
+
+optind：argv的当前索引值。当getopt函数在while循环中使用时，剩下的字符串为操作数，下标从optind到argc-1。
+
+  int getopt_long(int argc, char * const argv[],
+                  const char *optstring,
+                  const struct option *longopts, int *longindex);
+
+
+           struct option {
+               const char *name;
+               int         has_arg;
+               int        *flag;
+               int         val;
+           };
+  1）shell命令行解析
+  2）例子程序 mydate.c
+  "-H:MSy:md"
+  - 识别非选项的传参
+  :说明在终端使用的时候需要传参，有自己的参数
+4.环境变量
+  KEY = Value
+ command:
+   pwd 
+   export  //打印环境变量
+   date 星期显示为中文   在特定终端修改为英文
+  Q1:为什么ls在每个路径下都能执行？不用添加路径
+  shell的外部命令处理
+  PATH中保存二进制文件，在PATH中查找可执行的二进制文件 
+
+  environ是一个全局变量，
+  char** 存放字符指针数组  数组值为char*
+
+   #include <stdlib.h>
+
+
+       char *getenv(const char *name);
+
+       //putenv - change or add an environment variable
+       int setenv(const char *name, const char *value, int overwrite);
+       int unsetenv(const char *name); 
+
+
+       int putenv(char *string); //无const修饰
+
+       更改或添加环境变量
+       setenv 当覆盖写时存在字符串长度的问题
+       假如是更改环境变量的时候，需要先在堆空间先分配内存，然后再用指针指向该区域
+
+5.C程序的存储空间布局
+  32位 4G空间   64 128T
+  内核态：3G-4G
+
+  用户态：0-3G
+  
+  环境变量
+  栈
+  空白（静态库，堆栈可向上向下移动）
+  堆
+  未初始化
+  已初始化的
+  代码段
+
+  exec() 装未初始化，已初始化的，代码段
+
+ pamap
+ 
+
+6.库形式
+ 动态库
+ 静态库
+ 手工装载库
+  
+#include <dlfcn.h>
+
+       void *dlopen(const char *filename, int flags);
+
+       int dlclose(void *handle);
+
+      void *dlsym(void *handle, const char *symbol);
+
+7.函数之间正常跳转
+  
+  goto:不能实现跨函数的跳转，否则会破坏函数间的环境现场 
+  
+  类似于C++中的异常抛出
+
+  常跳转，可在函数间安全跳转（除信号外）
+  setjmp  执行一次，返回2次
+  longjmp  第二参数带非0值
+  If longjmp() is invoked with a second  argument
+       of 0, 1 will be returned instead.
+
+
+   #include <setjmp.h>
+
+       int setjmp(jmp_buf env);
+
+       int sigsetjmp(sigjmp_buf env, int savesigs);
+
+       void longjmp(jmp_buf env, int val);
+
+       void siglongjmp(sigjmp_buf env, int val);
+
+ 8.资源获取和控制 ulimit -a
+  getrlimit()
+  setrlimit()
+
+
+  #include <sys/time.h>
+  #include <sys/resource.h>
+
+       int getrlimit(int resource, struct rlimit *rlim);
+       int setrlimit(int resource, const struct rlimit *rlim);
+
+       struct rlimit {
+               rlim_t rlim_cur;  /* Soft limit */
+               rlim_t rlim_max;  /* Hard limit (ceiling for rlim_cur) */
+           };
+
+
+
 
 
