@@ -72,11 +72,16 @@ int main(int argc, char*argv[]){
 	//signal(SIGTERM, deamon_exit);
 
     //avoid the reentrant function
+    //避免信号的重入
 	sa.sa_handler = deamon_exit;
+	//现将信号置空
 	sigemptyset(&sa.sa_mask);
+	//将这些信号block
 	sigaddset(&sa.sa_mask,SIGQUIT | SIGTERM |SIGINT);
+	//特殊要求
 	sa.sa_flags = 0;
 
+	//examine and change a signal action
 	sigaction(SIGINT | SIGQUIT | SIGTERM , &sa, NULL);
 
 	if(daemonize()){

@@ -59,6 +59,10 @@ int main(int argc, char* argv[]){
     sigaddset(&set, SIGINT);
 
     //import
+    //先将信号设置为ublock状态
+
+    // If oldset is non-NULL, the previous value of 
+    //the signal mask is stored in oldset.
     sigprocmask(SIG_UNBLOCK, &set, &saveset);
     sigprocmask(SIG_BLOCK, &set, &oset);
 	for(j = 0; j < 100; ++j){
@@ -68,8 +72,9 @@ int main(int argc, char* argv[]){
 	      	sleep(1);
 		} 
 		write(1, "\n", 1);
+		//原子操作：等待一个信号
 		sigsuspend(&oset);
-		/**
+		/**非原子操作
 		sigset_t tmpset;
 		sigprocmask(SIG_SETMASK, &oset, &tmpset);
 		pause();

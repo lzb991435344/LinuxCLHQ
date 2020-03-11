@@ -141,7 +141,7 @@
     sigpending();
 9.扩展函数
  (1)sigsuspend() 原子操作 
-   类似于pause() 
+   函数功能类似于pause() 
 
  (2)sigaction() 替代signal()
 

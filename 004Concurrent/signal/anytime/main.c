@@ -28,7 +28,7 @@ int main(int argc, char* argv[]){
 
 	puts("End!");
 
-	whiel(1){
+	while(1){
 		write(1,"*",1);
 		sleep(1);
 	}
