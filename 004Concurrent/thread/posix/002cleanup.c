@@ -11,6 +11,9 @@ static void cleanup_func(void* p){
 static void* func(void* p){
 	puts("Thread is working!");
 
+	//挂钩子函数
+	// push and pop thread cancellation clean-up handlers
+
 	pthread_cleanup_push(cleanup_func, "cleanup1");
 	pthread_cleanup_push(cleanup_func, "cleanup2");
 	pthread_cleanup_push(cleanup_func, "cleanup3");
@@ -22,7 +25,7 @@ static void* func(void* p){
 	pthread_cleanup_pop(0);
 	pthread_cleanup_pop(0);
 
-
+	//线程退出
 	pthread_exit(NULL);
 }
 int main(int argc, char* argv[]){

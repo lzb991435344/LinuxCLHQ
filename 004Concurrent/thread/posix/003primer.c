@@ -46,7 +46,7 @@ static void* thr_primer(void* p){
 	    if(i % j == 0){
 	    	mark = 0;
 	    	break;
-	    	}
+	    }
 	}
 	
 	if(mark){

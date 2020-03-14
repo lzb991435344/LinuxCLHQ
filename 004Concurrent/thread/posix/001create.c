@@ -19,9 +19,11 @@ int main(int argc, char* argv[]){
 	err = pthread_create(&tid, NULL, function, NULL);
     
     if(err){
+    	//打印errno
     	fprintf(stderr, "pthread_create():%s\n", strerror(err));
     	exit(1);
     }
+    //等待线程返回
     pthread_join(tid, NULL);//wait for the created thread return 
 	puts("End!");
 	exit(0);
