@@ -15,7 +15,7 @@
 enum{
 	STATE_R = 1,
 	STATE_W,
-	STATE_AUTO, //from STATE_Ex to STATE_T
+	STATE_AUTO, //from STATE_Ex to STATE_T 从错误状态自动推到终止状态
 	STATE_Ex, //execption
 	STATE_T  //terminate
 };
@@ -101,7 +101,7 @@ static void relay(int fd1, int fd2){
 	//execptfd is null
 	fd_set rset,wset;
 
-	fd1_save = fcntl(fd1,F_GETFL);
+	fd1_save = fcntl(fd1, F_GETFL);
 	fcntl(fd1, F_SETFL, fd1_save | O_NONBLOCK);
 
 	fd2_save = fcntl(fd2,F_GETFL);
@@ -124,10 +124,10 @@ static void relay(int fd1, int fd2){
 
 		//watch job 
 		//empty set
-		FD_ZERO(&rset);
-		FD_ZERO(&wset);
+		FD_ZERO(&rset);//读集合
+		FD_ZERO(&wset);//写集合
 
-		//
+		//将fsm12的源fd设置为文件描述符读集合
 		if(fsm12.state == STATE_R){
 			FD_SET(fsm12.sfd, &rset);
 		}
@@ -147,7 +147,11 @@ static void relay(int fd1, int fd2){
 		//when status < STATE)AUTO then watch 
 		//safe sleep  select(-1,NULL,NULL, NULL,0)
 		if(fsm12.state < STATE_AUTO || fsm21.state < STATE_AUTO){
+			//nfds is the highest-numbered file descriptor in any 
+			//of the three  sets,  plus 1.
+
 			if(select(max(fd1, fd2) + 1, &rset, &wset, NULL, NULL) < 0){
+				//A signal was caught
 				if(errno == EINTR){
 					//reset watch job
 					continue;

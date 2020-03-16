@@ -4,11 +4,14 @@
 #include <sys/types.h>
 #include <errno.h>
 #include <unistd.h>
+
+
 #define TTY1 "/dev/tty11"
 #define TTY2 "/dev/tty12"
 #define BUFSIZE 1024
-//
 
+
+//状态机状态
 enum{
 	STATE_R = 1,
 	STATE_W,
@@ -16,6 +19,7 @@ enum{
 	STATE_T  //terminate
 };
 
+//保存状态机的信息
 struct fsm_st{
 	int state;
 	int sfd;
@@ -26,6 +30,7 @@ struct fsm_st{
 	char buf[BUFSIZE];
 };
 
+//状态机的推动
 static void fsm_driver(struct fsm_st* fsm){
 
 	int ret;
@@ -51,9 +56,11 @@ static void fsm_driver(struct fsm_st* fsm){
 
 		case STATE_W://write
 
+			//返回写进去的字节数
 			ret = write(fsm->dfd, fsm->buf + fsm->pos, fsm->len);
 			if(ret < 0){
 				//false
+				//假错，有可能是被信号中断的
 				if(errno == EAGAIN){
 					fsm->state = STATE_W;
 				}else{//true
@@ -90,10 +97,13 @@ static void fsm_driver(struct fsm_st* fsm){
 
 static void relay(int fd1, int fd2){
 	//nonblock
+	//保存原来的状态
 	int fd1_save,fd2_save;
 	struct fsm_st fsm12,fsm21;
 
+	//获取原来的文件描述的状态
 	fd1_save = fcntl(fd1,F_GETFL);
+	//设置为非阻塞模式
 	fcntl(fd1, F_SETFL, fd1_save | O_NONBLOCK);
 
 	fd2_save = fcntl(fd2,F_GETFL);
@@ -107,12 +117,14 @@ static void relay(int fd1, int fd2){
 	fsm21.sfd = fd2;
 	fsm21.dfd = fd1;
 
+	//状态机推动的条件
 	while(fsm12.state != STATE_T || fsm21.state != STATE_T){
 		fsm_driver(&fsm12);
 		fsm_driver(&fsm21);
 	}
 
 	//restore 
+	//恢复为原来的状态
 	fcntl(fd1, F_SETFL,fd1_save);
 	fcntl(fd2, F_SETFL, fd2_save);
 }
