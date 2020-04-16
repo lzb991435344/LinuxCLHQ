@@ -58,7 +58,7 @@ int main(int argc, char* argv[])
 				perror("write()");
 				exit(1);
 			}
-			pos +=ret;
+			pos += ret;
 			len -= ret;
 		}
 	}
