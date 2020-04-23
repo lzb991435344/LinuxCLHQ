@@ -57,6 +57,101 @@
 
   3）共享内存
 
+3.跨主机 socket
+  3.1 跨主机传输问题：
+    字节序--如何写程序判断端序？
+    大端序：低地址处放高字节
+    小端序：低地址端放低字节
+
+    区分主机字节序和网络字节序
+    主机字节序：host
+    网络字节序：network
+   解决：不区分
+    _to__:htons,htonl,ntohs,ntohl
+  3.2 对齐问题
+  struct{
+    int i;
+    char ch1;
+    float f;
+    char ch;
+  };
+  //16
+  解决办法：不对齐
+
+  3.3 类型长度
+  int  2 or 4
+  char
+ 
+  解决： int32_t  uint32_t int64_t int8_t uint8_t
+
+  上层：流式，数据报，，，
+
+  socket 层---->fd
+
+  下层：ipv4,ipv6
+   
+
+ （1）报式套接字
+
+   被动端：
+   i.取得socket
+   ii.给socket取得地址
+   iii.收/发消息
+   iiii.关闭socket
+
+   主动端：
+   i.取得socket
+   ii.给socket取得地址（可省略）
+   iii.发/收消息
+   iiii.关闭socket
+
+    socket()
+    bind()
+    sendto()
+    recvfrom()
+    inet_pton() 点分式转大整数
+    inet_ntop()
+
+   多点通讯：广播（全网广播，子网广播） 多播，组播
+  
+  setsockopt()
+  getsockopt()  
+ （2）流式套接字
 
 
-3.跨主机 socket						
+
+
+
+
+
+
+
+
+
+ 流媒体项目流程--广播与点播的区别
+
+
+server module:
+（1）media lib 媒体库，存放媒体，每个目录放一个文件/mp3,mp4,avi
+   数据库
+（2）thread_channel 多线程并发模型，多个线程对应频道，流量控制（切块发送）
+  （定时定量往外发）--竞争，冲突，并发，负载问题   一对多UDP，多点通讯，
+    组播，多播组
+（3）thread_list 节目单，每秒通过socket往外发
+（4）main  调整
+
+----socket----
+
+client module:
+（1）创建子进程，进程间通信，通过解码socket的数据进行播放--本地通信，如何
+  调解码器，访问数据库？文件系统存储特点
+（2）
+
+
+
+文件：
+（1）INSTALL 部署要求
+（2）LICENSE 许可
+（3）README 注意问题
+（4）doc 文档  admin （devel同行） user
+（5）

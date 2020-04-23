@@ -7,7 +7,7 @@
 static void* function(void* p){
 	puts("Thread is working!");
 	//return NULL;
-	pthread_exit(NULL);
+	pthread_exit(NULL);//退出线程
 }
 
 
@@ -16,6 +16,7 @@ int main(int argc, char* argv[]){
 	int err;
 
 	puts("Begin!");
+	//产生一个线程
 	err = pthread_create(&tid, NULL, function, NULL);
     
     if(err){

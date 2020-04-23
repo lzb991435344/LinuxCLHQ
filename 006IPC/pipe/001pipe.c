@@ -37,7 +37,6 @@ int main(){
 		close(pd[1]);
 		wait(NULL);
 		exit(0);
-
 	}
 	exit(0);
 }

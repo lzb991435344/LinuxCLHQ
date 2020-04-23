@@ -19,7 +19,7 @@
    corefgetline.c
    make getline , ./getline /etc/service , ulimit -a,-c 10240
 
-   ./getline /etc/service , ls,core.+进程号，加-g选项可调试
+   ./getline /etcservice/ , ls,core.+进程号，加-g选项可调试
  （3）signal
 
    原型：
