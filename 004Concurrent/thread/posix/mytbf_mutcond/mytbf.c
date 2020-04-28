@@ -146,7 +146,7 @@ struct mytbf_st* mytbf_init(int cps, int burst){
    return me;
 }
 
-//cpu busy
+//cpu not busy 非忙等，通知等待，需要监听机制
 int mytbf_fetchtoken(mytbf_t* ptr, int size){
 	struct mytbf_st* me = ptr;
 	int n;
@@ -158,13 +158,21 @@ int mytbf_fetchtoken(mytbf_t* ptr, int size){
 	pthread_mutex_lock(&me->mut);
 	//search, cpu busy 
 	while(me->token <= 0){
-		/**pthread_mutex_unlock(&me->mut);
+		/**
+
+		pthread_mutex_unlock(&me->mut);//解锁等待
 		//pause();
-		sched_yield();
-		pthread_mutex_lock(&me->mut);*/
+		sched_yield();//让出调度器
+		pthread_mutex_lock(&me->mut);//加锁
+
+		*/
 
 		//unlock and wait
 		//out of linjiequ
+		//
+		//解锁等待，条件变量阶段的通知
+		//在临界区外等待，有cond signal或brocast将等待打断
+		//然后抢锁，查看条件是否满足，而不是直接运行
 		pthread_cond_wait(&me->cond, &me->mut);
 	}
 	n = min(me->token,size);
@@ -187,6 +195,10 @@ int mytbf_returntoken(mytbf_t* ptr, int size){
 	}
 	//para
 	//bingfa
+	//pthread_cond_broadcast(同时唤醒多个等待的线程) or 
+	//pthread_cond_signal(唤醒任何一个等待的线程)
+	//并发角度：2个同时使用token,因token不够在等待，归还后
+	//能够满足需要，直接唤醒多个等待线程抢锁
 	pthread_cond_broadcast(&me->cond);
 	pthread_mutex_unlock(&me->mut);
 	return size;

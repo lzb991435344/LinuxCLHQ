@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include <string.h>
 
-//search busy
+//search no busy
 
 //num > 0  task 
 //num = 0  no task
@@ -15,6 +15,7 @@
 #define THRNUM 4
 static int num = 0;
 static pthread_mutex_t mut_num = PTHREAD_MUTEX_INITIALIZER;
+//通知num有变化
 static pthread_cond_t cond_num = PTHREAD_COND_INITIALIZER;
 static void* thr_primer(void*);
 
@@ -46,6 +47,7 @@ int main(int argc, char* argv[]){
             pthread_cond_wait(&cond_num, &mut_num);
     	}
     	num = i;//have task
+        //叫醒任何一个即可
         pthread_cond_signal(&cond_num);
     	pthread_mutex_unlock(&mut_num);
     }
@@ -59,6 +61,7 @@ int main(int argc, char* argv[]){
     	pthread_mutex_unlock(&mut_num);
     }
     num = -1;
+    //叫醒所有等待线程
     pthread_cond_broadcast(&cond_num);
     pthread_mutex_unlock(&mut_num);
 
@@ -93,8 +96,8 @@ static void* thr_primer(void* p){
 		}
 		//i = *(int*)p;
 		i = num;
-		num = 0;
-
+		num = 0;//num设置为0，条件改变
+        //叫醒多个线程
         pthread_cond_broadcast(&cond_num);
 		// linjiequ break,continue,goto ,jmp
 		//first unlock,then jmp 
