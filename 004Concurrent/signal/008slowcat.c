@@ -18,7 +18,7 @@
 static volatile int loop = 0;
 
 static void alrm_handler(int s){
-	alarm(1);
+	alarm(1);//为自己发出下一秒的时钟信号
 	loop = 1;
 }
 
@@ -40,8 +40,7 @@ int main(int argc, char* argv[])
     //修改点：当被信号打断的时候，需要加上控制
     do{
     	sfd = open(argv[1], O_RDONLY);
-		if(sfd < 0)
-		{   
+		if(sfd < 0){   
 			if(errno != EINTR){ //真错
 				perror("open()");
 			  	exit(1);
@@ -50,11 +49,11 @@ int main(int argc, char* argv[])
 	//当sfd < 0 时再做一次open()
     }while(sfd < 0);
 	  
-	while(1)
-	{
+	while(1){
 		while(!loop){ //loop == 0时等待alarm信号到来
-			pause();
+			pause();//阻塞，等待信号到来
 		}
+		//loop == 1 时改变loop的值
 		loop = 0;
 
 		//sfd是一个设备，当大量的数据到来时，只能等待读取
@@ -68,15 +67,13 @@ int main(int argc, char* argv[])
 			exit(1);
 		}
 
-		if(len == 0)
-		{
+		if(len == 0){
 			break;
 		}
 
 		pos = 0;
 		//防止讀取的字節數一次讀不完
-		while(len > 0)
-		{ 
+		while(len > 0){ 
 			ret = write(dfd, buf + pos, len);
 			if(ret < 0)
 			{
