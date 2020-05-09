@@ -6,6 +6,8 @@
 #include <pthread.h>
 #include "mysem.h"
 
+//
+
 struct mysem_st{
 	int value;//资源总量
 	pthread_mutex_t mut;//互斥量

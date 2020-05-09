@@ -190,6 +190,8 @@
       1）异步cancel
       2）推迟（默认，推迟至cancel点响应）
         cancel点：POSIX都是可能引发阻塞的系统调用
+
+        函数：
         function: pthread_setcancelstate()设置是否允许取消
                   pthread_setcanceltype() 设置取消方式
                   pthread_testcancel()取消点

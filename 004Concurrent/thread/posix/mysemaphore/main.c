@@ -13,7 +13,7 @@
 
 //控制资源
 //目的：产生201个线程去产生质数，同时刻约定最多只能有4个同时存在
-
+//不限制线程的总量
 
 static mysem_t* sem;//全局结构体指针
 static void* thr_primer(void* p);

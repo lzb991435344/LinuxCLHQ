@@ -11,6 +11,8 @@ static pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
 
+//使用cond变成通知法
+
 static int next(int n){
 	if(n + 1 == THRNUM){
 		return 0;
@@ -27,16 +29,21 @@ static void* thr_fun(void* p){
 		//pthread_mutex_lock(mut + n);
 		pthread_mutex_lock(&mut);
 
+		//锁住的是自己的锁
 		while(num != n){
 			//等待 mum = n
+			//抢到的锁，但是不是自己的锁则等待
 			pthread_cond_wait(&cond, &mut);
 		}
+
+
 		write(1, &c, 1);
 		
 		//取下一个
 		num = next(num);
 		//a在打印， bcd在等待
-		pthread_cond_broadcast(&cond);
+		//唤醒的也不知道是哪个线程，避免不可产生惊群
+		pthread_cond_broadcast(&cond);//发通知
 		pthread_mutex_unlock(&mut);
 	}
 	pthread_exit(NULL);
@@ -64,6 +71,8 @@ int main(int argc, char* argv[]){
 	for(i = 0; i < THRNUM; ++i){
 		pthread_join(tid[i], NULL);
 	}
+
+
 	pthread_mutex_destroy(&mut);
 	pthread_cond_destroy(&cond);
 
