@@ -7,7 +7,8 @@
 //pmap + processid 
 int main(){
 
-	puts(getenv("PATH"));
+	//puts(getenv("PATH"));
+	puts(getenv("PWD"));
 	getchar();
 	exit(0);
 }

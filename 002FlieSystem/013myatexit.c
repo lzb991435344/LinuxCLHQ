@@ -16,11 +16,13 @@ static void f3(void){
 int main(){
 
 	puts("Begin!");
-
+	//钩子函数调用时间：即将执行exit()之前调用
+	//调用顺序和C++中的虚构函数调用顺序相同
 	atexit(f1);
 	atexit(f2);
 	atexit(f3);
 	puts("End!");
+	
    /**
 	Begin!
 	f3
@@ -28,5 +30,8 @@ int main(){
 	f1
 	End!
    */
+
+	// void exit(int status);
+    // status & 0377    011 111 111  -2^8 ---+127(256个状态) 
 	exit(0);
 }

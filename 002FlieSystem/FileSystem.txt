@@ -338,6 +338,7 @@ int main(){
   int f;
   f = func();
   .......???  //当switch中出现了第四种情况的时候，可能是这里出问题了
+  //出现3中情况以外的情况
   switch(f){
     case 0:
     case 1:
@@ -346,7 +347,9 @@ int main(){
 
      //  exit(1);
      //当前不能直接调用exit(1) ,否则IO会被清理掉
-     //_exit()或者abort() 
+     //调用_exit()或者abort()
+     //不清理IO,调_exit()
+     //发信号处理 
   }
 }
 
@@ -387,6 +390,11 @@ optind：argv的当前索引值。当getopt函数在while循环中使用时，�
   Q1:为什么ls在每个路径下都能执行？不用添加路径
   shell的外部命令处理
   PATH中保存二进制文件，在PATH中查找可执行的二进制文件 
+  
+  PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:
+  
+  调用该位置下的二进制文件
+  
 
   environ是一个全局变量，
   char** 存放字符指针数组  数组值为char*
@@ -423,7 +431,7 @@ optind：argv的当前索引值。当getopt函数在while循环中使用时，�
 
   exec() 装未初始化，已初始化的，代码段
 
- pamap
+ pamap + 进程号
  
 
 6.库形式
