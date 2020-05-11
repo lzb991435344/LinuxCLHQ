@@ -28,6 +28,7 @@ int main(int argc, char* argv[]){
 	if(pid == 0){
 		setuid(atoi(argv[1]));
 		execvp(argv[2], argv + 2);
+		
 		perror("execvp()");
 		exit(1);
 	}

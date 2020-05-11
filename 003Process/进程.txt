@@ -101,7 +101,7 @@ u+s权限：调用可执行文件，切换成当前二进制的身份来进行 l
 g+s权限：
 鉴定权限的时候看的是e
   shell的由来：
-  init（0,0,0）+ fork(),exec() -----getty()+ exec()-----login() + fork() +exec()---shell(r,e,s);
+  init（0,0,0）+ fork(),exec() -----getty()+ exec()-----login() + fork() + exec()---shell(r,e,s);
 	getuid();
 	geteuid();
 	getgid();

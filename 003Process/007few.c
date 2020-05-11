@@ -2,15 +2,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
+//few   fork + exec + wait 函数
 
 int main(){
 
 	pid_t pid;
 
-	puts("begin");
+	puts("begin");//行缓冲，放在缓冲区中未输出，新的进程映像已被替换
 
-	fflush(NULL);
+	//import 调用execl之前先刷新流
+	fflush(NULL);//重定向之后需要流刷新
+
+    //终端和重定向之后的输出，未fflush()只会打印时间戳
+	/**  
+	begin
+	1583831185
+    */
 
 	pid = fork();
 
@@ -24,6 +31,7 @@ int main(){
 		perror("execl()");
 		exit(1);
 	}
+	//父进程等待子进程退出
 	wait(NULL);
 
 	puts("end");
@@ -34,5 +42,4 @@ int main(){
 begin
 1583831185
 end
-
 */
