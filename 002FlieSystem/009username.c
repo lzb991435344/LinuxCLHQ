@@ -14,7 +14,11 @@ int main(int argc, char* argv[]){
 		exit(1);
 	}
 
+	//get password file entry
+	//struct passwd *getpwuid(uid_t uid);
 	passwdline = getpwuid(atoi(argv[1]));
-	puts(passwdline->pw_name);
+
+	//struct passwd *getpwuid(uid_t uid);
+	puts(passwdline->pw_name);//打印用户名
 	exit(0);
 }

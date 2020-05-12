@@ -5,7 +5,7 @@
 3 2014-02-02 10:28:50
 */
 
-//tail -f /tmp/out
+//tail -f /tmp/out  //写文件的时候注意刷新缓冲区
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -23,6 +23,7 @@ int main(){
 	int count = 0;
 	time_t stamp;
 	struct tm* tm;
+
 	fp = fopen(FNAME, "a+");
 	if(fp == NULL){
 		perror("fopen()");
@@ -34,14 +35,17 @@ int main(){
 	}
 
 	while(1){
-		time(&stamp);
+		time(&stamp);//从内核中取时间
 		tm = localtime(&stamp);
+		//\n已经起不到刷新缓冲区的作用
+		//年份从1900年开始计算，加上1900
+		//月份范围是0-11，计算的时候加上1
 		fprintf(fp, "%-4d%d-%d-%d %d:%d:%d\n", ++count,\
 			tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday,\
 			tm->tm_hour, tm->tm_min, tm->tm_sec);
 		
 		//why fflush()
-		fflush(fp);
+		fflush(fp);//刷新流，全缓冲
 		sleep(1);
 	}
 

@@ -260,7 +260,7 @@ time_t mktime(struct tm *tm); 无const修饰
 (4)localtime()
   struct tm *localtime(const time_t *timep);
   //返回值存在于静态区
-(5)strftime()
+(5)strftime() 格式化字符串
 size_t strftime(char *s, size_t max, const char *format,
                        const struct tm *tm);
   struct tm* tm;

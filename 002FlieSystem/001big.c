@@ -6,6 +6,7 @@
 #include <fcntl.h>
 
 
+//做一个5G的大文件
 /**
  ./big /tmp/bigfile
  ls -l /tmp/bigfile 
@@ -23,16 +24,14 @@ int main(int argc, char* argv[])
 	}
 
 
-	int fd = open(argv[1],O_WRONLY | O_CREAT | O_TRUNC, 0600);
-	if(fd < 0)
-	{
+	int fd = open(argv[1], O_WRONLY | O_CREAT | O_TRUNC, 0600);
+	if(fd < 0){
 		perror("open");
 		exit(1);
 	}
 
 	off_t size = lseek(fd, 5LL*1024LL*1024LL*1024LL - 1LL, SEEK_SET);
-	if(size < 0)
-	{
+	if(size < 0){
 		perror("lseek()");
 		exit(1);
 	}

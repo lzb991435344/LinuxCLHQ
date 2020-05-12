@@ -6,6 +6,8 @@
 #include <crypt.h>
 
 
+//root用户执行
+
 int main(int argc, char** argv){
 	
 	char* input_pass;
@@ -17,10 +19,14 @@ int main(int argc, char** argv){
 		exit(1);
 	}
 
+	// getpass - get a password
+	// char *getpass(const char *prompt); 获取密码
 	input_pass = getpass("passwd:");
 	
-	shadowline = getspnam(argv[1]);
+	//通过username获取shadow文件中的一行
+	shadowline = getspnam(argv[1]); //argv[1]是用户名
 	
+	// char *sp_pwdp; Encrypted password 加密密码
 	crypted_pass = crypt(input_pass, shadowline->sp_pwdp);
 	if(strcmp(shadowline->sp_pwdp, crypted_pass) == 0){
 		puts("Ok!");
