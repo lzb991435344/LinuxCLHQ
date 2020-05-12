@@ -27,6 +27,7 @@ int main(int argc, char* argv[]){
 	int err;
 	int i;
 
+	//find pathnames matching a pattern, free memory from glob()
 	err = glob(PAT, 0, NULL, &globres);
 	if(err){
 		printf("Errcode is %d", err);

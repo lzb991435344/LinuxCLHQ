@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
 		fprintf(stderr,"Usage....\n");
 		exit(1);
 	}
+	//用用longlong类型来接
 	printf("%lld\n",(long long)flen(argv[1]));
 	exit(0);
 }

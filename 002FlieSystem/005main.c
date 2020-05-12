@@ -11,3 +11,11 @@ int main(int argc, char* argv[]){
 	}
 	exit(0);
 }
+
+/**
+./mian05 test
+ argc is 2
+./005main
+test
+
+*/
