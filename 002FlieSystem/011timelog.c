@@ -36,6 +36,7 @@ int main(){
 
 	while(1){
 		time(&stamp);//从内核中取时间
+		//transform date and time to broken-down time or ASCII
 		tm = localtime(&stamp);
 		//\n已经起不到刷新缓冲区的作用
 		//年份从1900年开始计算，加上1900
