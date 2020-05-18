@@ -23,6 +23,8 @@ int main(int argc, char* argv[])
     }
     while(1)
     {
+        //ssize_t getline(char **lineptr, size_t *n, FILE *stream);
+        //返回-1表示失败
     	if(getline(&linebuf, &linesize, fp) < 0)
     	{
     		break;

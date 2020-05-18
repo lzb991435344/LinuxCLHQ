@@ -16,28 +16,26 @@ int main(int argc, char* argv[])
     }
 
 	fps = fopen(argv[1],"r");
-	if(fps == NULL)
-	{
+	if(fps == NULL){
 		perror("fopen()");
 		exit(1);
 	}
 
 	fpd = fopen(argv[2],"w");
-	if(fpd == NULL)
-	{
+	if(fpd == NULL){
 		fclose(fps);
 		perror("fopen()");
 		exit(1);
 	}
-	while(1)
-	{
+
+
+	while(1){
 		ch = fgetc(fps);
-		if(ch = EOF)
-		{
+		if(ch == EOF){
 
 			break;
 		}
-		fputc(ch,fpd);
+		fputc(ch, fpd);
 	}
 
 	fclose(fps);

@@ -8,8 +8,10 @@
   (4)#include <string.h>  char* strerror(int errnum)
 fclose();
 
-fgetc(); 
+fgetc();作为函数使用，占用编译期时间
+getc();作为宏来使用，只是占用编译期的时间，不会占用进程的调用时间 
 fputc();
+
 
 fgets();
   //char *fgets(char *s, int size, FILE *stream);

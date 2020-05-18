@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
 		perror("fopen");
 		exit(1);
 	}
+	//计算文件中字符的数量
 	while(fgetc(fp) != EOF)
 	{
 		count++;
