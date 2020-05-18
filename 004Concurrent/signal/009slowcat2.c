@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
 			break;
 		}
 
-		pos = 0;
+		pos = 0;//从文件初始位置进行读取
 		//防止讀取的字節數一次讀不完
 		while(len > 0)
 		{ 
@@ -97,8 +97,8 @@ int main(int argc, char* argv[])
 				perror("write()");
 				exit(1);
 			}
-			pos +=ret;
-			len -= ret;
+			pos += ret;//改变读取到字节数的位置
+			len -= ret;//计算剩余的字节数，待继续读取
 		}
 		//方案1：sleep(1);
 	}

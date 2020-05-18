@@ -29,7 +29,8 @@ int main(int argc, char* argv[]){
     	exit(1);
     }
 
-
+    //将文件的一块数据映射到内存
+    //返回值是一个宏  MAP_FAILED (void *) -1)
     str = mmap(NULL, statres.st_size, PROT_READ, MAP_SHARED, fd,0);
     if(str == MAP_FAILED){
     	perror("mmap()");

@@ -282,6 +282,10 @@
    int pthread_kill(pthread_t thread, int sig);
    类比于  int kill(pid_t pid, int sig);
 
+  在多线程代码中，总是使用sigwait或者sigwaitinfo或者sigtimedwait等函数来处理信号。
+     而不是signal或者sigaction等函数。因为在一个线程中调用signal或者sigaction等函数会改变所以线程中的
+     信号处理函数。而不是仅仅改变调用signal/sigaction的那个线程的信号处理函数。
+     
  3）线程与fork()
   
 
