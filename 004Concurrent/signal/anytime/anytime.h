@@ -6,6 +6,10 @@
 #define JOB_MAX 1024
 typedef void at_jobfunc_t(void*);
 
+
+//对应的宏的位置，常用的宏的位置
+///usr/include/asm-generic/errno-base.h
+
 //like the fd
 /**
 @function at_addjob

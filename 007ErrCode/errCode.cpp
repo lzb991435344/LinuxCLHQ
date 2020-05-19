@@ -46,9 +46,9 @@ void test3(char* str1)
 	char string[10];
 	//if(strlen(str1) <= 10)应改为if(strlen(str1) < 10)，
 	//因为strlen的结果未统计’\0’所占用的1个字节。
-	if (strlen(str1) <= 10)
+	if (strlen(str1) <= 10) 
 	{
-		strcpy(string, str1);
+		strcpy(string, str1);//实际可拷贝的长度是size - 1
 	}
 }
 
@@ -156,7 +156,7 @@ void swap(int* p1, int* p2){
 }
 
 void swap_fix(int* p1, int* p2) {
-	int p;
+	int p;//一块内存空间
 	p = *p1;
 	*p1 = *p2;
 	*p2 = p;
