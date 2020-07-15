@@ -138,7 +138,7 @@ int main(int argc,char* argv[]){
 	}
 
 	val = 1;
-	if(setsockopt(sd, IPPROTO_IP, IP_DROP_MEMBERSHIP, &val, sizeof(val)) < 0){
+	if(setsockopt(sd, IPPROTO_IP, IP_MULTICAST_LOOP, &val, sizeof(val)) < 0){
 
 		perror("setsockopt()");
 		exit(1);
@@ -193,7 +193,7 @@ int main(int argc,char* argv[]){
     		exit(1);
     	}
 
-    	serveraddr = sizeof(serveraddr);
+    	serveraddr_len = sizeof(serveraddr);
     	while(1){
     		len = recvfrom(sd, msg_list, MSG_LIST_MAX, 0, (void*)&serveraddr, &serveraddr_len);
     		if(len < sizeof(struct msg_list_st)){
@@ -216,7 +216,8 @@ int main(int argc,char* argv[]){
     }
 
     free(msg_list);
-     while(1){
+    //这里不能死循环
+     while(ret < 1){
      	ret = scanf("%d\n", &choseid);
      	if(ret != 1){
      		exit(1);
@@ -228,6 +229,7 @@ int main(int argc,char* argv[]){
     //recv package,send chnnel data to child
      fprintf(stdout, "choseid = %d\n", ret);
 
+     //max
      msg_channel = malloc(MSG_CHANNEL_MAX);
      if(msg_channel == NULL){
      	perror("malloc()");

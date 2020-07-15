@@ -50,6 +50,8 @@ static void* thr_channel_snder(void* ptr){
 	 	if(sendto(serversd, sbufp, len + sizeof(chnid_t), 0, (void*)& sndaddr, sizeof(sndaddr)) < 0){
 	 		syslog(LOG_ERR, "%d:sendto(serverd, sbufp..):%s",ent->chnid, strerror(errno));
 	 		exit(1);
+	 	}else{
+	 		syslog(LOG_DEBUG, "thr_channel(%d):sendto successd", ent->chnid, strerror(errno));
 	 	}
 	 	sched_yield();
 	}

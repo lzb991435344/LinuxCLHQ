@@ -32,6 +32,7 @@ static void alarm_action(int s, siginfo_t* infop, void* unuse){
 
 	//alarm(1);//function
 	//signal from kernel or user or from others 
+	//信号不是来自内核
 	if(infop->si_code != SI_KERNEL){
 		return ;
 	}
@@ -56,11 +57,13 @@ static void module_unload(void){
 	struct itimerval itv;
     sigaction(SIGALRM, &alarm_save, NULL);
 
+    //定时器全部置0
     itv.it_interval.tv_sec = 0;
 	itv.it_interval.tv_usec = 0;
 	itv.it_value.tv_sec = 0;
 	itv.it_value.tv_usec = 0;
 
+	//ITIMER_REAL 每次过期时，会生成一个alarm信号
 	setitimer(ITIMER_REAL, &itv, NULL);
 
 	int i;
@@ -79,6 +82,8 @@ static void module_load(void){
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = SA_SIGINFO;
 
+
+	//第一个参数 except SIGKILL and SIGSTOP.
 	sigaction(SIGALRM, &sa, &alarm_save);
 	/**if error*/
 
@@ -110,6 +115,7 @@ struct mytbf_st* mytbf_init(int cps, int burst){
    int pos;
 
    //模块只加载一次，设置一个标志位
+   //避免模块被重复加载
    if(!inited){
 	module_load();
 	inited = 1;
