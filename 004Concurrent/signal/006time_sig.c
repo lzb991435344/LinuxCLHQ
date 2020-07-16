@@ -8,7 +8,11 @@
 //会作减少存取内存的优化，但有可能会读脏数据。当要求使
 //用volatile声明变量值的时候，系统总是重新从它所在的内存读取
 //数据，即使它前面的指令刚刚从该处读取过数据。
+
+//直接从它所在的内存读取数据
 static volatile int loop = 1;
+
+//当信号到达时，直接将loop设置为0，停止时间的计数
 static void alarm_handler(int s){
 	loop = 0;
 }
@@ -18,8 +22,11 @@ int main(){
 
 	//alarm(5);
 	//.......
+
+	//注册alarm信号 
 	signal(SIGALRM,alarm_handler);
     alarm(5);
+
 	while(loop){
 		count++;
 	}

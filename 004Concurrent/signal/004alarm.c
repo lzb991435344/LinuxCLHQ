@@ -3,6 +3,9 @@
 #include <stdlib.h>
 
 
+
+//sleep = alarm + pause
+
 int main(){
 
 	//用来设置信号SIGALRM在经过参数seconds秒数后发送给目前的进程

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 /**
- a timer 
+ a timer 定时器的实现
 */
 static void f1(void* p){
 	printf("f1():%s\n", p);

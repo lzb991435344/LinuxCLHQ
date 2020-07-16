@@ -23,6 +23,7 @@ int main(int argc, char* argv[]){
 
 	int i,j,mark;
     int err;
+    //线程id数组
     pthread_t tid[THRNUM];
 
 
@@ -37,6 +38,7 @@ int main(int argc, char* argv[]){
     }
 
     for(i = LEFT; i <= RIGHT; ++i){
+
     	pthread_mutex_lock(&mut_num);
     	while(num != 0){
     		/**pthread_mutex_unlock(&mut_num);
@@ -55,11 +57,13 @@ int main(int argc, char* argv[]){
     //the last task must be consumed
     //number is changed, lock anf unlock 
     pthread_mutex_lock(&mut_num);
+
     while(num != 0){
     	pthread_mutex_lock(&mut_num);
     	sched_yield();
     	pthread_mutex_unlock(&mut_num);
     }
+    
     num = -1;
     //叫醒所有等待线程
     pthread_cond_broadcast(&cond_num);
@@ -70,16 +74,20 @@ int main(int argc, char* argv[]){
     for(i = 0; i < THRNUM; ++i){
     	pthread_join(tid[i], NULL);
     }
+
     pthread_mutex_destroy(&mut_num);
     pthread_cond_destroy(&cond_num);
 	exit(0);  
 }
+
 static void* thr_primer(void* p){
 	int i,j;
 	int mark;
     
     while(1)
     {
+
+        //临界内操作
 		pthread_mutex_lock(&mut_num);
 		while(num == 0 ){
 			/**pthread_mutex_unlock(&mut_num);
@@ -96,12 +104,17 @@ static void* thr_primer(void* p){
 		}
 		//i = *(int*)p;
 		i = num;
+
 		num = 0;//num设置为0，条件改变
         //叫醒多个线程
         pthread_cond_broadcast(&cond_num);
 		// linjiequ break,continue,goto ,jmp
 		//first unlock,then jmp 
 		pthread_mutex_unlock(&mut_num);
+
+
+
+
 		mark = 1;
 
 		for(j = 2; i < i/2; ++j){
@@ -112,8 +125,9 @@ static void* thr_primer(void* p){
 		}
 		
 		if(mark){
-			printf("[%d]%d is a primer\n", (int)p,i);
+			printf("[%d]%d is a primer\n", (int)p, i);
 		}
 	}
+
 	pthread_exit(NULL);
 }

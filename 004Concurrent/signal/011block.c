@@ -18,6 +18,7 @@ int main(int argc, char* argv[]){
 	//2.信号到达
 
 	//SIGINT maybe is block or unblock
+	//ctrl + c发出一次中断信号
     signal(SIGINT, int_handler);
     sigemptyset(&set);
     sigaddset(&set, SIGINT);
@@ -27,6 +28,7 @@ int main(int argc, char* argv[]){
     sigprocmask(SIG_UNBLOCK, &set, &saveset);
 
 	for(j = 0; j < 100; ++j){
+		//设置为block信号
 		sigprocmask(SIG_BLOCK, &set, &oset);
 		for(i = 0; i < 5; ++i){
 			write(1, "*", 1);

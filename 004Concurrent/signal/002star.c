@@ -21,8 +21,13 @@ int main(int argc, char* argv[]){
 	//2.信号到达
     signal(SIGINT, int_handler);
 	for(i = 0 ; i < 10; ++i){
-      write(1, "*", 1);
+      write(1, "*", 1);//往终端上打印
       sleep(1);
 	}
 	exit(0);
 }
+
+/*打印10个*，遇到中断之后执行函数，打印！
+********^C!**
+
+*/

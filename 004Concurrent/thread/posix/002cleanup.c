@@ -21,7 +21,7 @@ static void* func(void* p){
 	puts("push over!");
 
 	//the value must be 1
-	pthread_cleanup_pop(1);
+	pthread_cleanup_pop(1);//clean3在栈顶
 	pthread_cleanup_pop(0);
 	pthread_cleanup_pop(0);
 
@@ -44,3 +44,14 @@ int main(int argc, char* argv[]){
 	pthread_join(tid, NULL);
 	exit(0);
 }
+
+/**
+Begin!
+End!
+Thread is working!
+push over!
+cleanup3
+
+
+
+**/

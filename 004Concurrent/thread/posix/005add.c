@@ -57,3 +57,8 @@ int main(int argc, char* argv[]){
 	}
 	exit(0);
 }
+
+/**
+2
+*/
+//结果为2,20个线程同时写了2

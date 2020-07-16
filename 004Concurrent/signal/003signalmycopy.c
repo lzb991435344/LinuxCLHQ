@@ -9,9 +9,9 @@
 #define BUFSIZE 1024
 
 /**
- 拷贝文件
+ 拷贝文件到特定位置，比对文件大小
 ./mycpy /etc/service /tmp/out
-diff /etc/service /tmp/out
+diff /etc/service /tmp/out  比对文件大小
 */
 int main(int argc, char* argv[])
 {
@@ -48,6 +48,8 @@ int main(int argc, char* argv[])
 		}
     }while(dfd < 0);
     
+
+
 	while(1)
 	{
 		len = read(sfd, buf, BUFSIZE);
@@ -89,3 +91,4 @@ int main(int argc, char* argv[])
 	close(dfd);
 	exit(0);
 }
+

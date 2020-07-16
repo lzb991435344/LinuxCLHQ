@@ -7,6 +7,8 @@
 
 //print abcd to stdout
 static int num = 0;
+
+//静态对象
 static pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
@@ -25,10 +27,15 @@ static void* thr_fun(void* p){
 	int n = (int)p;//0 1 2 3
 	int c = 'a' + n;
 	//lock a,unlock b
-	while(1){
+
+	int m = 4;
+	//char buf[4];
+	while(m--){
 		//pthread_mutex_lock(mut + n);
 		pthread_mutex_lock(&mut);
 
+
+		//临界区内等待，发通知
 		//锁住的是自己的锁
 		while(num != n){
 			//等待 mum = n
@@ -36,8 +43,11 @@ static void* thr_fun(void* p){
 			pthread_cond_wait(&cond, &mut);
 		}
 
-
-		write(1, &c, 1);
+		
+		write(1, &c, 1);	
+		
+		//puts(" ");
+		//fprintf(stdout, &c, NULL);
 		
 		//取下一个
 		num = next(num);
@@ -78,3 +88,8 @@ int main(int argc, char* argv[]){
 
 	exit(0);
 }
+
+/**
+abcdabcdabcdabcd
+
+*/

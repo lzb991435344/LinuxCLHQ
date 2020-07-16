@@ -9,6 +9,7 @@ int main(){
     
     //测试 time + ./005timeCiru > tmp/out
     //time(NULL) 返回当前时间
+    
     //get time in seconds
 	end = time(NULL) + 5;
 	while(time(NULL) <= end){

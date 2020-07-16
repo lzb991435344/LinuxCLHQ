@@ -56,3 +56,7 @@ int main(int argc, char* argv[]){
 	pthread_mutex_destroy(&mut);
 	exit(0);
 }
+/*
+每调用一次从文件中拿出字符增加1
+
+*/

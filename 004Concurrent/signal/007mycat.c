@@ -65,6 +65,7 @@ int main(int argc, char* argv[])
 		//读取的长度作为循环条件
 		while(len > 0)
 		{ 
+			//dfd == 1 标准输出
 			ret = write(dfd, buf + pos, len);
 			if(ret < 0)
 			{

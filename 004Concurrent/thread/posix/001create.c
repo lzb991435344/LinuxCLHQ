@@ -29,3 +29,11 @@ int main(int argc, char* argv[]){
 	puts("End!");
 	exit(0);
 }
+
+/**
+Begin!
+Thread is working!
+End!
+
+
+*/

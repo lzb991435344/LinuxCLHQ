@@ -18,6 +18,8 @@
 static volatile int loop = 0;
 
 static void alrm_handler(int s){
+
+	//使用alrm来控制流量
 	alarm(1);//为自己发出下一秒的时钟信号
 	loop = 1;
 }
@@ -50,6 +52,7 @@ int main(int argc, char* argv[])
     }while(sfd < 0);
 	  
 	while(1){
+		//等待
 		while(!loop){ //loop == 0时等待alarm信号到来
 			pause();//阻塞，等待信号到来
 		}

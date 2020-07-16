@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 	  
 	while(1)
 	{
-		while(!loop){
+		while(!loop){//loop == 0
 			pause();
 		}
 		loop = 0;
@@ -79,7 +79,9 @@ int main(int argc, char* argv[])
 			exit(1);
 		}
 
-		if(len == 0)
+		//循环结束之后读取到了len个字节
+
+		if(len == 0)//没读取到内容
 		{
 			break;
 		}
@@ -100,8 +102,10 @@ int main(int argc, char* argv[])
 				exit(1);
 			}
 			pos +=ret;
-			len -= ret;
+			len -= ret;//没读取完成，继续读取
 		}
+
+		//循环结束之后读取到了len个字节
 		//方案1：sleep(1);
 	}
 	close(sfd);
