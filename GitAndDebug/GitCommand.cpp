@@ -34,6 +34,10 @@ ssh  user@ip
    查看特定端口号  netstat -anp | grep + 端口号
    查看进程的目录 ll/proc/进程pid
 
+   (7)vim 一些命令
+  删除特定行--- :1,20d  删除1到20行
+  粘贴模式-- :set paste  使用这个命令粘贴不会乱
+
 
 
   
