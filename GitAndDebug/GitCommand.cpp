@@ -29,6 +29,10 @@ ssh  user@ip
   git checkout test //切换分支
   git remote add origin  + 文件名.git  //和远程的分支关联
   git push origin test //上传分支
+  
+  git log --查看之前提交的修改分支
+  git show + commitid --查看所有的修改
+  
   (6)其他linux下常用命令
    ps -ef | grep + 进程名字
    查看特定端口号  netstat -anp | grep + 端口号
@@ -37,6 +41,9 @@ ssh  user@ip
    (7)vim 一些命令
   删除特定行--- :1,20d  删除1到20行
   粘贴模式-- :set paste  使用这个命令粘贴不会乱
+  找到特定行-- :number
+
+
 
 
 
