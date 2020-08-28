@@ -32,7 +32,25 @@ ssh  user@ip
   
   git log --查看之前提交的修改分支
   git show + commitid --查看所有的修改
-  
+
+  合并分支基本命令
+  git checkout -b slave01
+
+  等价于下面两条命令
+  git branch + git checkout + slave01
+
+  git commit -m "xxxx"
+  git checkout master 
+  git merge slave01
+
+  查看所有分支
+  ps：先转到特定的目录下
+  git branch -a 
+
+
+  删除分支
+  git branch -d hotfix
+    
   (6)其他linux下常用命令
    ps -ef | grep + 进程名字
    查看特定端口号  netstat -anp | grep + 端口号
@@ -42,6 +60,7 @@ ssh  user@ip
   删除特定行--- :1,20d  删除1到20行
   粘贴模式-- :set paste  使用这个命令粘贴不会乱
   找到特定行-- :number
+  通配符： ?+特定的字符 -----？error 
 
 
 
