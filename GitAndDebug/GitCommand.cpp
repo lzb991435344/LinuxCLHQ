@@ -50,6 +50,14 @@ ssh  user@ip
 
   删除分支
   git branch -d hotfix
+
+  目的：将master分支的修改转移到另一个分支
+  （1）git stash 暂存
+  （2）切换到另一个分支，执行 git stash pop ,在这个分支进行提交
+  （3）切换回主分支，进行merge 分支
+
+
+
     
   (6)其他linux下常用命令
    ps -ef | grep + 进程名字
