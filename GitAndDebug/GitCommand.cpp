@@ -57,7 +57,13 @@ ssh  user@ip
   （3）切换回主分支，进行merge 分支
 
 
-
+  撤销修改的几个场景
+  （1）已修改，未add
+  git checkout .  //清除修改，重新检出
+  （2）已修改 + add
+   git reset
+   (3)清除未跟踪的文件
+   git clean -fdx
     
   (6)其他linux下常用命令
    ps -ef | grep + 进程名字
