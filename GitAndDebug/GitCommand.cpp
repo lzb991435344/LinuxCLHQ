@@ -65,6 +65,13 @@ ssh  user@ip
    (3)清除未跟踪的文件
    git clean -fdx
     
+  git下载子模块
+  （1）在根目录下执行
+    git submudule init 
+   (2)下载子模块
+   git submodule update --recursive
+
+
   (6)其他linux下常用命令
    ps -ef | grep + 进程名字
    查看特定端口号  netstat -anp | grep + 端口号
