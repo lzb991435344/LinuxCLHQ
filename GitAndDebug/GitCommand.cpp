@@ -64,7 +64,17 @@ ssh  user@ip
    git reset
    (3)清除未跟踪的文件
    git clean -fdx
-    
+   (4)已经提交到远程仓库的处理,重新后退版本
+   git reset --soft HEAD^  ,则意味着将HEAD从顶端的commit往下移动到上一个commit
+   (i).git log查看提交记录，确定自己的提交内容和要撤回的内容；
+   (ii).git reset --soft HEAD^  ,则意味着将HEAD从顶端的commit往下移动到上一个commit
+   (iii).git status   查看当前的修改状态，可以发现上次提交已经被撤回。
+   (iiii).git reset HEAD xxx/xxx/xx.c    将你不想提交的文件进行撤回。
+   (iiiii).再次git status  确认不想提交文件已经不在stage上。
+   (iiiiii). 再次进行commit即可。
+
+
+
   git下载子模块
   （1）在根目录下执行
     git submudule init 
