@@ -2,7 +2,7 @@
 (1)git init 初始化项目
 
 (2)ssh -T git@github.com 连接远程的github
-
+生成公私钥，将公钥传到github
 ssh  user@ip
 
 (3)其他重要命令
