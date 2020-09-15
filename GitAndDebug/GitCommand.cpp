@@ -81,6 +81,10 @@ ssh  user@ip
    (2)下载子模块
    git submodule update --recursive
 
+  PS：子模块中提交的代码，需要在项目外再提交一次才能在拉取代码的时候拉取成功
+
+
+
 
   (6)其他linux下常用命令
    ps -ef | grep + 进程名字
@@ -92,6 +96,9 @@ ssh  user@ip
   粘贴模式-- :set paste  使用这个命令粘贴不会乱
   找到特定行-- :number
   通配符： ?+特定的字符 -----？error 
+  
+  （8）sz,rz的安装和配置 --上传合计下载服务器的文件工具
+   配置网址：https://qq52o.me/2697.html
 
 
 
