@@ -89,6 +89,7 @@ ssh  user@ip
   (6)其他linux下常用命令
    ps -ef | grep + 进程名字
    查看特定端口号  netstat -anp | grep + 端口号
+   查询端口号内运行的文件目录 (ps -ef | grep 9014) ---- !ps  
    查看进程的目录 ll/proc/进程pid
 
    (7)vim 一些命令
