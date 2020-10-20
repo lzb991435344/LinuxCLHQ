@@ -19,7 +19,7 @@ nginx安装目录：/usr/local/Cellar/nginx/
 nginx   /usr/local/bin
 
 sduo nginx 
-nginx -s reload | reopen | stop | quit
+nginx -s reload | reopen | stop | quit  
 nginx -t 检测配置文件有没有错误
 
 //php搭建环境
