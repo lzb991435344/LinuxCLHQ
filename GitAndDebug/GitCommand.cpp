@@ -77,7 +77,7 @@ ssh  user@ip
 
   git下载子模块
   （1）在根目录下执行
-    git submudule init 
+    git submodule init 
    (2)下载子模块
    git submodule update --recursive
 
