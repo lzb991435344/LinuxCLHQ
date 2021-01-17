@@ -1,0 +1,5 @@
+redis总结：
+基本使用
+（1）redis-cli -h 127.0.0.1 -p  6699 连接
+（2）keys * 线上禁用   key量少可以使用
+（3）set key value
