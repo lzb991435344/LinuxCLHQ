@@ -133,7 +133,7 @@ CMakeLists.txt
 	>list               # 显示当前调试处的源代码
 	>info b             # 显示当前断点设置情况
 
-	(2)pstack 跟踪栈空间
+	(2)pstack 跟踪栈空间    18177384904
 	$pstrack <program-pid>
 
 	$ pstack 4551
@@ -325,6 +325,8 @@ $ldd 005main
 	第三列：库加载的开始地址
 
 (2)lsof 文件相关
+	
+
 (3)ipcs 查询进程间通信状态
  (i) 查看系统使用的IPC资源
   	$ipcs -m 查看系统使用的IPC共享内存资源
@@ -335,7 +337,7 @@ $ldd 005main
 
 
  (4)vmstat 可实时动态监视操作系统的虚拟内存、进程、CPU活动。
-
+	
 
  (5)sar 系统活动情况报告
 
