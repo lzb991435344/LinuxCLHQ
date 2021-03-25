@@ -8,8 +8,11 @@
           / src / scanner.l 重置文件 git add
     + 文件名 git commit - m 'add Makefile and .gitignore' 添加提交注释 git log查看提交的日志 git show查看提交的修改 tree 查看目录及文件的树形结构
 
-    (4) 打版本 git pull git commit
-    - m "message" git push git tag 查看版本 git tag - a t2 .2.2 - m "message" git push-- tags
+    (4) 打版本 git pull 
+    git commit -m "message" 
+    git push 
+    git tag 查看版本 
+    git tag - a t2 .2.2 - m "message" git push-- tags
 
     (5) 分支操作 git branch test //新建分支
     git checkout test            //切换分支
@@ -17,11 +20,11 @@
     + 文件名.git           //和远程的分支关联
       git push origin test //上传分支
 
-      git log-- 查看之前提交的修改分支 git show
-    + commitid-- 查看所有的修改
+      git log-- 查看之前提交的修改分支 
+      git show + commitid-- 查看所有的修改
 
-    合并分支基本命令 git checkout
-    - b slave01
+    合并分支基本命令
+    git checkout -b slave01
 
     等价于下面两条命令 git branch
     + git checkout + slave01
@@ -29,7 +32,7 @@
     git commit - m "xxxx" git checkout master git merge slave01
 
     查看所有分支
-    ps：先转到特定的目录下 git branch - a
+    ps：先转到特定的目录下 git branch -a
 
     删除分支 git branch - d hotfix
 
@@ -60,7 +63,11 @@
     (2) 下载子模块 git submodule update-- recursive
     PS：子模块中提交的代码，需要在项目外再提交一次才能在拉取代码的时候拉取成功
 
-    (6) 其他linux下常用命令 ps - ef | grep + 进程名字 查看特定端口号 netstat - anp | grep + 端口号 查询端口号内运行的文件目录(ps - ef | grep 9014)-- --!ps 查看进程的目录 ll / proc / 进程pid(7) vim 一些命令 删除特定行-- - : 1,20d 删除1到20行
+    (6) 其他linux下常用命令 
+    ps - ef | grep + 进程名字 查看特定端口号 
+    netstat - anp | grep + 端口号 查询端口号内运行的文件目录(ps - ef | grep 9014)-- 
+    --!ps 查看进程的目录 ll / proc / 进程pid
+    (7) vim 一些命令 删除特定行-- - : 1,20d 删除1到20行
     粘贴模式-- : set paste 使用这个命令粘贴不会乱
     找到特定行-- : number通配符：
     ? +特定的字符-- ---？error
@@ -78,3 +85,6 @@
        alias gpush = 'git push origin HEAD:refs/for/master'
        alias gst = 'git status'
        保存文件后，运行 : source ~ /.zshrc
+
+(10) 设置github 免密码提交
+ git remote set-url origin git@github.com:lzb991435344/Algorithm.git
