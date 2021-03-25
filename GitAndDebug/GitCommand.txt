@@ -1,17 +1,24 @@
 
 (1) git init 初始化项目
 
-    (2) ssh
-    - T git @github.com 连接远程的github 生成公私钥，将公钥传到github 具体步骤看git官网教程使用方法 ssh user @ip
+(2) ssh- T git @github.com 连接远程的github 生成公私钥，将公钥传到github 
+具体步骤看git官网教程使用方法 ssh user @ip
 
-          (3) 其他重要命令 git config-- global alias.d diff 比较命令 git config-- global alias.st status 查看状态 git config-- global alias.ds 'diff --staged' 查看staged状态 git reset
-          / src / scanner.l 重置文件 git add
-    + 文件名 git commit - m 'add Makefile and .gitignore' 添加提交注释 git log查看提交的日志 git show查看提交的修改 tree 查看目录及文件的树形结构
+(3) 其他重要命令 
+git config-- global alias.d diff 比较命令
+git config-- global alias.st status 查看状态
+git config-- global alias.ds 'diff --staged' 查看staged状态
+git reset / src / scanner.l 重置文件
+git add+ 文件名 
+git commit - m 'add Makefile and .gitignore' 添加提交注释
+git log查看提交的日志
+git show查看提交的修改
+tree 查看目录及文件的树形结构
 
-    (4) 打版本 git pull 
-    git commit -m "message" 
+    (4) 打版本 git pull
+    git commit -m "message"
     git push 
-    git tag 查看版本 
+    git tag 查看版本
     git tag - a t2 .2.2 - m "message" git push-- tags
 
     (5) 分支操作 git branch test //新建分支
