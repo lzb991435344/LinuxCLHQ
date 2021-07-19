@@ -6,9 +6,9 @@ https://linuxtools-rst.readthedocs.io/zh_CN/latest/base/index.html
 1.程序构建
 1.1 配置
 (1)查询可用配置选项
- 	./configure --help
- (2)配置路径，–prefix是配置使用的最常用选项，设置程序安装的路径
- 	./configure --prefix=/usr/local/snmp
+	./configure --help
+(2)配置路径，–prefix是配置使用的最常用选项，设置程序安装的路径
+	./configure --prefix=/usr/local/snmp
 
 1.2 Makefile 
 1.2.1 编写要点
@@ -55,7 +55,7 @@ https://blog.csdn.net/zhuiyunzhugang/article/details/88142908
 
 (2)编译项目
 	在当前目录执行 cmake . ，得到 Makefile 后再使用 make 命令编译得到 Demo1 可执行文件。
-   cmake . + make 
+    cmake . + make 
 
 1.3.2 同一目录，多个源文件
 	V1:CMakeLists.txt
@@ -157,12 +157,12 @@ CMakeLists.txt
 
 2.2 目标文件分析
 	(1)nm
-	 用来列出目标文件的符号清单。
+	用来列出目标文件的符号清单。
 
 	 $nm 005main
 0000000000201010 B __bss_start
 0000000000201010 b completed.7697
-                 w __cxa_finalize@@GLIBC_2.2.5
+                w __cxa_finalize@@GLIBC_2.2.5
 0000000000201000 D __data_start
 0000000000201000 W data_start
 00000000000005f0 t deregister_tm_clones
@@ -172,76 +172,74 @@ CMakeLists.txt
 0000000000200db8 d _DYNAMIC
 0000000000201010 D _edata
 0000000000201018 B _end
-                 U exit@@GLIBC_2.2.5
+                U exit@@GLIBC_2.2.5
 00000000000007c4 T _fini
 00000000000006c0 t frame_dummy
 0000000000200da8 t __frame_dummy_init_array_entry
 0000000000000924 r __FRAME_END__
 0000000000200fa8 d _GLOBAL_OFFSET_TABLE_
-                 w __gmon_start__
+                w __gmon_start__
 00000000000007e0 r __GNU_EH_FRAME_HDR
 0000000000000558 T _init
 0000000000200db0 t __init_array_end
 0000000000200da8 t __init_array_start
 00000000000007d0 R _IO_stdin_used
-                 w _ITM_deregisterTMCloneTable
-                 w _ITM_registerTMCloneTable
+                w _ITM_deregisterTMCloneTable
+                w _ITM_registerTMCloneTable
 00000000000007c0 T __libc_csu_fini
 0000000000000750 T __libc_csu_init
-                 U __libc_start_main@@GLIBC_2.2.5
+                U __libc_start_main@@GLIBC_2.2.5
 00000000000006ca T main
-                 U printf@@GLIBC_2.2.5
-                 U puts@@GLIBC_2.2.5
+                U printf@@GLIBC_2.2.5
+                U puts@@GLIBC_2.2.5
 0000000000000630 t register_tm_clones
 00000000000005c0 T _start
 0000000000201010 D __TMC_END__
 
- (2)objdump
- 	objdump工具用来显示二进制文件的信息，就是以一种可阅读的格式让你更多地了解
- 	二进制文件可能带有的附加信息。
- 
- 	objdump -d 005main  用于研究编译器和汇编器的输出,细节信息
+(2)objdump
+	objdump工具用来显示二进制文件的信息，就是以一种可阅读的格式让你更多地了解
+	二进制文件可能带有的附加信息。
 
- (3)readelf
- 	ELF Header 为该文件中所有段入口显示了详细的摘要
- 	将调试信息放入到目标文件中，并且还可以显示这些信息
- 	$readelf --debug-dump a.out | more
+	objdump -d 005main  用于研究编译器和汇编器的输出,细节信息
 
- (4)size 查看程序内存占用
-   size 005main
-   text	   data	    bss	    dec	    hex	filename
-   1754	    616	      8	   2378	    94a	005main
- (5)file 查看文件类型
-  file 005main
-  005main: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), 
-  dynamically linked, interpreter /lib64/l, for GNU/Linux 3.2.0,
-   BuildID[sha1]=0faf5bc9dd187e0b860bb3226130b3ccfcdb87ab, not stripped
+(3)readelf
+	ELF Header 为该文件中所有段入口显示了详细的摘要
+	将调试信息放入到目标文件中，并且还可以显示这些信息
+	$readelf --debug-dump a.out | more
 
-   查看core文件是由那个文件生成的
-   $file core.22355
+(4)size 查看程序内存占用
+	size 005main
+	text	   data	    bss	    dec	    hex	filename
+	1754	    616	      8	   2378	    94a	005main
+(5)file 查看文件类型
+	file 005main
+	005main: ELF 64-bit LSB shared object, x86-64, version 1 (SYSV), 
+	dynamically linked, interpreter /lib64/l, for GNU/Linux 3.2.0,
+	BuildID[sha1]=0faf5bc9dd187e0b860bb3226130b3ccfcdb87ab, not stripped
 
+	查看core文件是由那个文件生成的
+	$file core.22355
 
-  (6)strings 查询数据中的文本信息
-   $strings <objfile>
+(6)strings 查询数据中的文本信息
+	$strings <objfile>
 
-  (7)fuser 显示文件使用者
-  示所有正在使用着指定的file, file system 或者 sockets的进程信息;
-  $fuser -m -u redis-server
+(7)fuser 显示文件使用者
+	显示所有正在使用着指定的file, file system 或者 sockets的进程信息;
+	$fuser -m -u redis-server
 	redis-server: 11552rce(weber) 22912rce(weber) 25501rce(weber)
-  使用了-m和-u选项，用来查找所有正在使用redis-server的所有进程的PID以及该进程的OWNER；
+	使用了-m和-u选项，用来查找所有正在使用redis-server的所有进程的PID以及该进程的OWNER；
 
 fuser通常被用在诊断系统的”resource busy”问题。如果你希望kill所有正在使用某一指定的file, file system or sockets的进程的时候，
 你可以使用-k选项:
 
- $fuser –k /path/to/your/filename
+$fuser –k /path/to/your/filename
 
- (8)xxd 以十六进制方式显示文件，只显示文本信息
-   xxd 005main
- (9)od 
-   通常使用od命令查看特殊格式的文件内容。通过指定该命令的不同选项可以以十进制、八进制、十六进制和ASCII码来显示文件。
- 
- 参数说明：
+(8)xxd 以十六进制方式显示文件，只显示文本信息
+	xxd 005main
+(9)od 
+	通常使用od命令查看特殊格式的文件内容。通过指定该命令的不同选项可以以十进制、八进制、十六进制和ASCII码来显示文件。
 
+参数说明：
 -A 指定地址基数，包括：
 
 d 十进制
@@ -272,7 +270,6 @@ top第三行显示当前系统的，其中有两个值很关键:
 	%wa：等待I/O的CPU时间百分比，如果这个值过高，表明IO存在瓶颈；
 
 (2)分析内存瓶颈
-	
 	free
 	系统实际可用的内存为free工具输出第二行的free+buffer+cached
 (3)分析IO瓶颈
@@ -295,20 +292,19 @@ top第三行显示当前系统的，其中有两个值很关键:
 	$ps -fe| grep bash
 	$pstack + 进程号
 
-
 	strace 跟踪系统调用
 (5)优化代码程序
 
 	gprof使用步骤
-1.用gcc、g++、xlC编译程序时，使用-pg参数，如：g++ -pg -o test.exe test.cpp编译器会自
-动在目标代码中插入用于性能测试的代码片断，这些代码在程序运行时采集并记录函数的调用关
-系和调用次数，并记录函数自身执行时间和被调用函数的执行时间。
-2.执行编译后的可执行程序，如：./test.exe。该步骤运行程序的时间会稍慢于正常编译的可执
-行程序的运行时间。程序运行结束后，会在程序所在路径下生成一个缺省文件名为gmon.out的
-文件，这个文件就是记录程序运行的性能、调用关系、调用次数等信息的数据文件。
-3.使用gprof命令来分析记录程序运行信息的gmon.out文件，如：gprof test.exe gmon.out
-则可以在显示器上看到函数调用相关的统计、分析信息。上述信息也可以采用
-gprof test.exe gmon.out> gprofresult.txt重定向到文本文件以便于后续分析。
+	1.用gcc、g++、xlC编译程序时，使用-pg参数，如：g++ -pg -o test.exe test.cpp编译器会自
+	动在目标代码中插入用于性能测试的代码片断，这些代码在程序运行时采集并记录函数的调用关
+	系和调用次数，并记录函数自身执行时间和被调用函数的执行时间。
+	2.执行编译后的可执行程序，如：./test.exe。该步骤运行程序的时间会稍慢于正常编译的可执
+	行程序的运行时间。程序运行结束后，会在程序所在路径下生成一个缺省文件名为gmon.out的
+	文件，这个文件就是记录程序运行的性能、调用关系、调用次数等信息的数据文件。
+	3.使用gprof命令来分析记录程序运行信息的gmon.out文件，如：gprof test.exe gmon.out
+	则可以在显示器上看到函数调用相关的统计、分析信息。上述信息也可以采用
+	gprof test.exe gmon.out> gprofresult.txt重定向到文本文件以便于后续分析。
 
 
 
@@ -325,51 +321,120 @@ $ldd 005main
 	第三列：库加载的开始地址
 
 (2)lsof 文件相关
-	
+	(i)无任何参数
+		lsof | more 
+		COMMAND：进程的名称
+		PID：进程标识符
+		PPID：父进程标识符（需要指定-R参数）
+		USER：进程所有者
+		PGID：进程所属组
+		FD：文件描述符，应用程序通过文件描述符识别该文件。如cwd、txt等
+		TYPE：文件类型，如DIR、REG等
+		DEVICE：指定磁盘的名称
+		SIZE：文件的大小
+		NODE：索引节点（文件在磁盘上的标识）
+		NAME：打开文件的确切名称
+	(ii) 相关命令及作用
+		查找某个文件相关的进程 $lsof /bin/bash
+		-u 列出某个用户打开的文件信息
+		-c 列出某个程序进程所打开的文件信息 如mysql
+		-p 通过某个进程号显示该进程打开的文件 + 进程pid
+		-i tcp/:3306/  空参数代表所有的网络连接，tcp代表所有与tcp相关的网络连接，特定端口号 
 
 (3)ipcs 查询进程间通信状态
- (i) 查看系统使用的IPC资源
-  	$ipcs -m 查看系统使用的IPC共享内存资源
-	$ipcs -q 查看系统使用的IPC队列资源
-	$ipcs -s 查看系统使用的IPC信号量资源
- (ii)
+	(i) 查看系统使用的IPC资源
+		$ipcs -m 查看系统使用的IPC共享内存资源
+		$ipcs -q 查看系统使用的IPC队列资源
+		$ipcs -s 查看系统使用的IPC信号量资源
+	(ii)
 
 
 
- (4)vmstat 可实时动态监视操作系统的虚拟内存、进程、CPU活动。
-	
+(4)vmstat 可实时动态监视操作系统的虚拟内存、进程、CPU活动。
+	vmstat 5 5
+	Procs（进程）:
+		r: 运行队列中进程数量
+		b: 等待IO的进程数量
+	Memory（内存）:
+		swpd: 使用虚拟内存大小
+		free: 可用内存大小
+		buff: 用作缓冲的内存大小
+		cache: 用作缓存的内存大小
+	Swap:
+		si: 每秒从交换区写到内存的大小
+		so: 每秒写入交换区的内存大小
+		IO：（现在的Linux版本块的大小为1024bytes）
+		bi: 每秒读取的块数
+		bo: 每秒写入的块数
+	system：
+		in: 每秒中断数，包括时钟中断
+		cs: 每秒上下文切换数
+		CPU（以百分比表示）
+		us: 用户进程执行时间(user time)
+		sy: 系统进程执行时间(system time)
+		id: 空闲时间(包括IO等待时间)
+		wa: 等待IO时间
 
- (5)sar 系统活动情况报告
+(5)sar 系统活动情况报告
+	(i)回溯统计数据
+		默认情况下，sar从最近的0点0分开始显示数据；如果想继续查看一天前的报告；可以查看保存在/var/log/sysstat/下的sa日志； 
+		$sar -f /var/log/sysstat/sa28 \| head sar -r -f
+		/var/log/sysstat/sa28
+	(ii)其他查看命令
+		sar -u 查看CPU使用率
+			%user 用户模式下消耗的CPU时间的比例；
+			%nice 通过nice改变了进程调度优先级的进程，在用户模式下消耗的CPU时间的比例
+			%system 系统模式下消耗的CPU时间的比例；
+			%iowait CPU等待磁盘I/O导致空闲状态消耗的时间比例；
+			%steal 利用Xen等操作系统虚拟化技术，等待其它虚拟CPU计算占用的时间比例；
+			%idle CPU空闲时间比例
+		
+		sar -q: 查看平均负载
+			runq-sz：运行队列的长度（等待运行的进程数）
+			plist-sz：进程列表中进程（processes）和线程（threads）的数量
+			ldavg-1：最后1分钟的系统平均负载 ldavg-5：过去5分钟的系统平均负载
+			ldavg-15：过去15分钟的系统平均负载
 
+		sar -r： 指定-r之后，可查看物理内存使用状况
+			kbmemfree：这个值和free命令中的free值基本一致,所以它不包括buffer和cache的空间.
+			kbmemused：这个值和free命令中的used值基本一致,所以它包括buffer和cache的空间.
+			%memused：物理内存使用率，这个值是kbmemused和内存总量(不包括swap)的一个百分比.
+			kbbuffers和kbcached：这两个值就是free命令中的buffer和cache.
+			kbcommit：保证当前系统所需要的内存,即为了确保不溢出而需要的内存(RAM+swap).
+			%commit：这个值是kbcommit与内存总量(包括swap)的一个百分比.
 
- (6)readelf ELF
- (i)可重定位的对象文件(Relocatable file)
-	由汇编器汇编生成的 .o 文件
-(ii)可执行的对象文件(Executable file)
-	可执行应用程序
-(iii)可被共享的对象文件(Shared object file)
-	动态库文件，也即 .so 文件
+		sar -W：查看页面交换发生状况
+			页面发生交换时，服务器的吞吐量会大幅下降；服务器状况不良时，如果怀疑因为内存不足而导致了页面交换的发生，
+			可以使用这个命令来确认是否发生了大量的交换；
+			pswpin/s：每秒系统换入的交换页面（swap page）数量
+			pswpout/s：每秒系统换出的交换页面（swap page）数量				
 
- (7)wget 文件下载
+		怀疑CPU存在瓶颈，可用 sar -u 和 sar -q 等来查看
+		怀疑内存存在瓶颈，可用sar -B、sar -r 和 sar -W 等来查看
+		怀疑I/O存在瓶颈，可用 sar -b、sar -u 和 sar -d 等来查看
 
- (8)scp 跨机远程复制
+(6)readelf ELF
+	(i)可重定位的对象文件(Relocatable file)
+		由汇编器汇编生成的 .o 文件
+	(ii)可执行的对象文件(Executable file)
+		可执行应用程序
+	(iii)可被共享的对象文件(Shared object file)
+		动态库文件，也即 .so 文件
+	相关命令：
+	文件头概要信息
+		readelf -h + 文件名
+	编译是否加入了调试信息
+		readelf -S + 文件名（可以是.o文件） | grep debug
 
- (9)crontab 定时任务
+(7)wget 文件下载
 
+(8)scp 跨机远程复制
+	(i)本地--->远程
+		scp local_file remote_username@remote_ip:remote_folder
+	(ii)远程---->本地
+		scp  remote_username@remote_ip:remote_folder local_file
+		ps:复制目录加 -r 参数
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+(9)crontab 定时任务
 
 
