@@ -1,13 +1,13 @@
-
-//基本的执行目录
+1.Nginx
+(1)基本的执行目录
 cd /usr/local/etc/nginx
 
-//修改host,加入ip+域名
+(2)修改host,加入ip+域名
 host : sudo vim /etc / hosts
 127.0.0.1    game.dartou.com1
 127.0.0.1    localhost.cms.com
 
-//基本配置
+(3)基本配置
 //master配置中加入在其他目录下配置的文件
 include webserver/*.conf
 
@@ -22,12 +22,17 @@ sduo nginx
 nginx -s reload | reopen | stop | quit
 nginx -t 检测配置文件有没有错误
 
-//php搭建环境
+2.Php
+(1)php搭建环境
 php-fpm   /usr/local/Cellar/php/7.4.9/sbin
 sudo ./php-fpm
-
 sudo pkill php-fpm
 
+service php-fpm start/status
+
+(2)登录服相关的代码加入的位置
+加入到nginx相关的位置
+/usr/share/nginx/html/slg_login
 
 
 

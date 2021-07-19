@@ -1,0 +1,24 @@
+1.smb服务的基本搭建
+(1)基本目录的映射关系
+[public]
+        path=/home/lzb/work
+        public=yes
+        browseable=yes
+        writable=yes
+        create mask=0644
+        directory mask=0755
+
+
+[homes]
+        comment = Home Directories
+        valid users = %S, %D%w%S
+        browseable = No
+        read only = No
+        inherit acls = Yesi
+
+
+
+(2)修改文件权限相关的问题
+文件写不进去的时候需要关注
+ chmod -R 777 + 目录
+ chown -R lzb:lzb + 目录

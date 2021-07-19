@@ -1,5 +1,19 @@
 redis总结：
-基本使用
+1.基本使用
 （1）redis-cli -h 127.0.0.1 -p  6699 连接
 （2）keys * 线上禁用   key量少可以使用
 （3）set key value
+（4）鉴权相关
+    查看当前设置的密码
+    config get requirepass 
+    config set requirepass 123456
+
+    验证
+    auth + 密码
+（5）下载，启动相关
+    yum install redis-server
+
+2.相关的数据结构
+(1)hash
+
+(2)

@@ -1,0 +1,5 @@
+1.mysql相关的搭建
+(1)软件替代
+yum install mariadb-server
+service mariadb-server start/status
+(2)
