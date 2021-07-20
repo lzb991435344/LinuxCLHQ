@@ -42,3 +42,17 @@ int main()
     pthread_join(tid2,NULL);
     return 0;
 }
+
+//编译： gcc -g 012gdbthread.c -lpthread -o gdbThread
+
+/**
+ *  I am thread2,ID: -151062784
+I am thread1,ID: -142670080
+I am thread1,ID: -142670080
+I am thread2,ID: -151062784
+I am thread1,ID: -142670080
+I am thread2,ID: -151062784
+.......
+ * 
+ * 
+*/
