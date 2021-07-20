@@ -15,6 +15,8 @@ int main(){
 
    stamp = time(NULL);
    tm = localtime(&stamp);//time_t 转为 tm结构体
+   
+   //format date and time
    strftime(timestr, TIMESTRSIZE, "Now:%Y-%m-%d", tm);
    puts(timestr);
 
