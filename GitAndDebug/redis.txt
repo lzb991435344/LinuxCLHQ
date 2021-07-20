@@ -14,6 +14,17 @@ redis总结：
     yum install redis-server
 
 2.相关的数据结构
-(1)hash
+(1)hash  取相关数值的时候，循环的步长设置为2
+hgetall,hmget,pipe(使用pipe获得较快的查询)
 
-(2)
+(2)有序集合(排行榜相关)
+    zadd 添加数据
+
+    ZREVRANGE key start stop [WITHSCORES]
+    返回有序集中指定区间内的成员，通过索引，分数从高到低
+
+    ZRANGE key start stop [WITHSCORES]
+    通过索引区间返回有序集合指定区间内的成员
+
+
+    zremrangebyrank --清除数据
