@@ -5,6 +5,17 @@
 #include <unistd.h>
 static jmp_buf save;
 
+/*
+C/C++提供了三个宏
+__FUNCTION__,
+_FILE_和
+_LINE_
+定位程序运行时的错误。
+程序预编译时预编译器将用所在的函数名，
+文件名和行号替换。当运行时错误产生后这三个宏分别能返回错误所在的函数，
+所在的文件名和所在的行号
+*/
+
 //在函数d中设置longjmp
 static void d(){
 
