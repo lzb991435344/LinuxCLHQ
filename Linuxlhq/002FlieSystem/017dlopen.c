@@ -13,6 +13,7 @@ string such as "libm.so.6") */
   char *error;
 
   handle = dlopen(LIBM_SO, RTLD_LAZY);
+  //返回NULL
   if (!handle) {
     fprintf(stderr, "%s\n", dlerror());
     exit(EXIT_FAILURE);

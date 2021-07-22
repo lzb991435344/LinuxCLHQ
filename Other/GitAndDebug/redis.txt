@@ -1,5 +1,30 @@
 redis总结：
-基本使用
+1.基本使用
 （1）redis-cli -h 127.0.0.1 -p  6699 连接
 （2）keys * 线上禁用   key量少可以使用
 （3）set key value
+（4）鉴权相关
+    查看当前设置的密码
+    config get requirepass 
+    config set requirepass 123456
+
+    验证
+    auth + 密码
+（5）下载，启动相关
+    yum install redis-server
+
+2.相关的数据结构
+(1)hash  取相关数值的时候，循环的步长设置为2
+hgetall,hmget,pipe(使用pipe获得较快的查询)
+
+(2)有序集合(排行榜相关)
+    zadd 添加数据
+
+    ZREVRANGE key start stop [WITHSCORES]
+    返回有序集中指定区间内的成员，通过索引，分数从高到低
+
+    ZRANGE key start stop [WITHSCORES]
+    通过索引区间返回有序集合指定区间内的成员
+
+
+    zremrangebyrank --清除数据

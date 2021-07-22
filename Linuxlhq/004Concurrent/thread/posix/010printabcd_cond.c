@@ -22,6 +22,7 @@ static int next(int n){
 	return n + 1;
 }
 
+//4个线程做同样的事情
 static void* thr_fun(void* p){
 	//n == thread id
 	int n = (int)p;//0 1 2 3

@@ -18,6 +18,7 @@ int main(){
 	puts("Begin!");
 	//钩子函数调用时间：即将执行exit()之前调用
 	//调用顺序和C++中的虚构函数调用顺序相同
+	//先将函数压栈，先调用的最后退出
 	atexit(f1);
 	atexit(f2);
 	atexit(f3);

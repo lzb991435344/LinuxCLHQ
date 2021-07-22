@@ -29,7 +29,7 @@ int main(){
 		dup2(pd[0], 0);
 		close(pd[0]);
 
-		open("/dev/null", O_RDWR);
+		int fd = open("/dev/null", O_RDWR);
 		dup2(fd, 1);
 		dup2(fd, 2);
 		execl("/usr/bin/mpg123", "mpg123","-",NULL);

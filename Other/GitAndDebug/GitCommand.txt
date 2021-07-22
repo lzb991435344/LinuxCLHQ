@@ -95,3 +95,19 @@ tree 查看目录及文件的树形结构
 
 (10) 设置github 免密码提交
  git remote set-url origin git@github.com:lzb991435344/Algorithm.git
+
+
+(11)解决虚拟机及物理机直接因换行符的问题
+old mode 100755  
+new mode 100644 
+
+fix:git config core.filemode false
+
+换行符造成的问题：
+git config --global core.autocrlf false
+git config --global core.filemode false
+git config --global core.safecrlf false
+
+(12)linux相关日志文件目录
+相关的第三方软件启动的输出log，系统启动相关log
+/var/log
