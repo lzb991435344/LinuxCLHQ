@@ -16,7 +16,8 @@
     read only = No
     inherit acls = Yesi
 
-
+测试配置文件是否正确：
+    testparm
 
 (2)修改文件权限相关的问题
 文件写不进去的时候需要关注
