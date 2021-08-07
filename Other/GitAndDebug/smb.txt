@@ -23,3 +23,6 @@
 文件写不进去的时候需要关注
  chmod -R 777 + 目录
  chown -R lzb:lzb + 目录
+ 
+ (3)增加用户
+ smbpasswd -a lzb 
